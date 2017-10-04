@@ -1,7 +1,6 @@
 package com.ru.tgra.shapes;
 
 import com.badlogic.gdx.Gdx;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 
 public class Maze {
 	private int mazeWidth, mazeDepth;
@@ -18,7 +17,7 @@ public class Maze {
 				this.maze[z][x] = new Cell();
 			}
 		}
-		this.unit = 3;
+		this.unit = 1;
 		this.wallColor = new Color(0.5f, 0.5f, 0.5f, 1);
 	}
 

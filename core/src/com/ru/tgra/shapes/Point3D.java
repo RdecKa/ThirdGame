@@ -24,6 +24,14 @@ public class Point3D {
 		z += v.z;
 	}
 
+	public Point3D returnAddedVector(Vector3D vector) {
+		Point3D p = this.clone();
+		p.add(vector);
+		return p;
+	}
+
+	public Point3D clone() { return new Point3D(x, y, z); }
+
 	@Override
 	public String toString() {
 		return "(" + this.x + ", " + this.y + ", " + this.z + ")";

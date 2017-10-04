@@ -11,6 +11,11 @@ public class Vector3D {
 		this.y = y;
 		this.z = z;
 	}
+	public Vector3D returnScaled(float S) {
+		Vector3D v = this.clone();
+		v.scale(S);
+		return v;
+	}
 
 	public void scale(float S) {
 		x *= S;
@@ -58,5 +63,15 @@ public class Vector3D {
 
 	public Vector3D clone() {
 		return new Vector3D(x, y, z);
+	}
+
+	public void rotateXZ(float angleDegrees) {
+		float angle = (float) Math.toRadians(angleDegrees);
+		float ca = (float) Math.cos(angle);
+		float sa = (float) Math.sin(angle);
+		float newX = ca * x - sa * z;
+		float newZ = sa * x + ca * z;
+		x = newX;
+		z = newZ;
 	}
 }

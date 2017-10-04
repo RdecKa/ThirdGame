@@ -12,72 +12,61 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
 	Maze maze;
+	Point3D playerPos;
+	Vector3D playerDir, lookDown;
+
+	Vector3D moveLeft, moveForward, up;
+
+	int mouseX, mouseY;
 
 	@Override
 	public void create () {
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
+		maze = new Maze(50, 100);
+		playerPos = new Point3D(0.5f, 1, 0.5f);
+		playerDir = new Vector3D(1, 0, 1);
+		lookDown = new Vector3D(0, -0.5f, 0);
+
+		moveLeft = new Vector3D(1, 0, 0);
+		moveForward = new Vector3D(0, 0, 1);
+		up = new Vector3D(0,1,0);
+
 		perspCamera = new PerspectiveCamera();
-		perspCamera.Look3D(new Point3D(1, 1.5f, 1), new Point3D(2,1,2), new Vector3D(0,1,0));
 
 		//ortCamera = new OrtographicCamera();
 		//ortCamera.Look3D(new Point3D(1, 1, 1.5f), new Point3D(2, 2, 1.5f), new Vector3D(0,0,1));
-
-		maze = new Maze(5, 10);
 	}
 
 	private void input(float deltaTime)
 	{
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			perspCamera.slide(10 * deltaTime, 10 * deltaTime, 10 * deltaTime);
+			playerPos.add(moveLeft.returnScaled(deltaTime * 10));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			perspCamera.slide(-10 * deltaTime, -10 * deltaTime, -10 * deltaTime);
+			playerPos.add(moveLeft.returnScaled(- deltaTime * 10));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			perspCamera.pitch(50 * deltaTime);
+			playerPos.add(moveForward.returnScaled(deltaTime * 10));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			perspCamera.pitch(-50 * deltaTime);
+			playerPos.add(moveForward.returnScaled(- deltaTime * 10));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-			perspCamera.roll(50 * deltaTime);
+			playerDir.rotateXZ(100 * deltaTime);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			perspCamera.roll(-50 * deltaTime);
+			playerDir.rotateXZ(-100 * deltaTime);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-			perspCamera.yaw(50 * deltaTime);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-			perspCamera.yaw(-50 * deltaTime);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
-			perspCamera.slide(10 * deltaTime, 0, 0);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_7)) {
-			perspCamera.slide(-10 * deltaTime, 0, 0);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
-			perspCamera.slide(0, 10 * deltaTime, 0);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
-			perspCamera.slide(0, -10 * deltaTime, 0);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6)) {
-			perspCamera.slide(0, 0, 10 * deltaTime);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_9)) {
-			perspCamera.slide(0, 0, -10 * deltaTime);
-		}
-
 	}
 	
 	private void update(float deltaTime)
 	{
-
-		//do all updates to the game
+		Point3D center = playerPos.returnAddedVector(playerDir).returnAddedVector(lookDown);
+		moveForward = playerDir;
+		moveLeft = up.cross(moveForward);
+		perspCamera.Look3D(playerPos, center, up);
 	}
 	
 	private void display()
@@ -85,7 +74,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		perspCamera.setPerspectiveProjection(50, 9.0f/16.0f, 1, 100);
+		perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
 		perspCamera.setShaderMatrix();
 		//ortCamera.setOrtographicProjection(-10, 10, -10, 10, -10, 100);
 		//ortCamera.setShaderMatrix();
