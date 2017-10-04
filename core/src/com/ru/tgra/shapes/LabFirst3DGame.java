@@ -24,7 +24,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		//ortCamera = new OrtographicCamera();
 		//ortCamera.Look3D(new Point3D(1, 1, 1.5f), new Point3D(2, 2, 1.5f), new Vector3D(0,0,1));
 
-		maze = new Maze(10, 10);
+		maze = new Maze(5, 10);
 	}
 
 	private void input(float deltaTime)
