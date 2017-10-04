@@ -6,22 +6,19 @@ public class Vector3D {
 	public float y;
 	public float z;
 
-	public Vector3D(float x, float y, float z)
-	{
+	public Vector3D(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public void scale(float S)
-	{
+	public void scale(float S) {
 		x *= S;
 		y *= S;
 		z *= S;
 	}
 
-	public void add(Vector3D v2)
-	{
+	public void add(Vector3D v2) {
 		x += v2.x;
 		y += v2.y;
 		z += v2.z;
@@ -42,8 +39,7 @@ public class Vector3D {
 		return (float)Math.sqrt(dotSelf());
 	}
 
-	public void normalize()
-	{
+	public void normalize() {
 		float len = length();
 		x = x / len;
 		y = y / len;
