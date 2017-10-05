@@ -54,10 +54,16 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 			playerPos.add(moveForward.returnScaled(- deltaTime * 10));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-			playerDir.rotateXZ(100 * deltaTime);
+			playerDir.rotateXZ(-100 * deltaTime);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			playerDir.rotateXZ(-100 * deltaTime);
+			playerDir.rotateXZ(100 * deltaTime);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+			lookDown.y += deltaTime;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+			lookDown.y -= deltaTime;
 		}
 	}
 	
