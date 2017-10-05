@@ -83,12 +83,15 @@ public class Maze {
 
 	public void addRandomWall() {
 		Wall newWall = null;
-		while (newWall == null) {
+		int safetyCounter = this.mazeDepth * this.mazeWidth * 10;
+		while (newWall == null && safetyCounter > 0) {
 			int z = rand.nextInt(this.mazeDepth);
 			int x = rand.nextInt(this.mazeWidth);
 			newWall = maze[z][x].addWall();
+			safetyCounter--;
 		}
-		this.innerWalls.add(newWall);
+		if (newWall != null)
+			this.innerWalls.add(newWall);
 	}
 }
 
