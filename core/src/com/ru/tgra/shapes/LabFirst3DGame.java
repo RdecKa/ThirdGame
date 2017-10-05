@@ -13,14 +13,12 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	PerspectiveCamera perspCamera;
 	Maze maze;
 	int mazeWidth, mazeDepth;
-	Point3D playerPos;
-	Vector3D playerDir, lookDown;
 
-	Vector3D moveLeft, moveForward, up;
+	Vector3D moveLeft, moveForward, up, lookDown;;
 
 	boolean firstPersonView;
 
-	int mouseX, mouseY;
+	Player player;
 
 	@Override
 	public void create () {
@@ -30,10 +28,10 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		mazeWidth = 20;
 		mazeDepth = 10;
 		maze = new Maze(mazeWidth, mazeDepth);
-		playerPos = new Point3D(0.5f, 1, 0.5f);
-		playerDir = new Vector3D(1, 0, 1);
-		lookDown = new Vector3D(0, -0.5f, 0);
 
+		player = new Player(new Point3D(0.5f, 1, 0.5f), new Vector3D(1, 0, 1));
+
+		lookDown = new Vector3D(0, -0.5f, 0);
 		moveLeft = new Vector3D(1, 0, 0);
 		moveForward = new Vector3D(0, 0, 1);
 		up = new Vector3D(0,1,0);
@@ -52,22 +50,22 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void input(float deltaTime)
 	{
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			playerPos.add(moveLeft.returnScaled(deltaTime));
+			player.position.add(moveLeft.returnScaled(deltaTime));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			playerPos.add(moveLeft.returnScaled(- deltaTime));
+			player.position.add(moveLeft.returnScaled(- deltaTime));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			playerPos.add(moveForward.returnScaled(deltaTime));
+			player.position.add(moveForward.returnScaled(deltaTime));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			playerPos.add(moveForward.returnScaled(- deltaTime));
+			player.position.add(moveForward.returnScaled(- deltaTime));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-			playerDir.rotateXZ(-100 * deltaTime);
+			player.direction.rotateXZ(-100 * deltaTime);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			playerDir.rotateXZ(100 * deltaTime);
+			player.direction.rotateXZ(100 * deltaTime);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
 			lookDown.y += deltaTime;
@@ -86,12 +84,11 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-		//System.out.println(playerPos);
-		Point3D center = playerPos.returnAddedVector(playerDir).returnAddedVector(lookDown);
-		moveForward = playerDir;
+		Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
+		moveForward = player.direction;
 		moveLeft = up.cross(moveForward);
 		maze.raiseWalls(deltaTime);
-		perspCamera.Look3D(playerPos, center, up);
+		perspCamera.Look3D(player.position, center, up);
 	}
 	
 	private void display()
@@ -124,6 +121,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		ortCamera.setOrtographicProjection(-mazeWidth * 0.5f, mazeWidth * 0.5f, -mazeDepth * 0.5f, mazeDepth * 0.5f, 1, 10);
 		ortCamera.setShaderMatrix();
 		maze.draw(false);
+		player.draw();
 	}
 
 	@Override
