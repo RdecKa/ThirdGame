@@ -77,6 +77,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Point3D center = playerPos.returnAddedVector(playerDir).returnAddedVector(lookDown);
 		moveForward = playerDir;
 		moveLeft = up.cross(moveForward);
+		maze.raiseWalls(deltaTime);
 		perspCamera.Look3D(playerPos, center, up);
 	}
 	

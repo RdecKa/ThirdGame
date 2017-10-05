@@ -10,7 +10,7 @@ public class Maze {
 	private Cell[][] maze;
 	private int unit;
 	private Color wallColor;
-	private Vector<Wall> innerWalls;
+	private Vector<Wall> innerWalls, innerWallsToBe;
 	private static Random rand = new Random();
 
 	public Maze(int mazeWidth, int mazeDepth) {
@@ -25,6 +25,7 @@ public class Maze {
 		}
 		this.wallColor = new Color(0.5f, 0.5f, 0.5f, 1);
 		this.innerWalls = new Vector<Wall>();
+		this.innerWallsToBe = new Vector<Wall>();
 	}
 
 	public void draw() {
@@ -79,6 +80,9 @@ public class Maze {
 		for (Wall wall : this.innerWalls) {
 			wall.draw(this.unit);
 		}
+		for (Wall wall : this.innerWallsToBe) {
+			wall.draw(this.unit);
+		}
 	}
 
 	public void addRandomWall() {
@@ -91,7 +95,20 @@ public class Maze {
 			safetyCounter--;
 		}
 		if (newWall != null)
-			this.innerWalls.add(newWall);
+			this.innerWallsToBe.add(newWall);
+	}
+
+	public void raiseWalls(float raiseFor) {
+		Vector<Wall> newFullyRaised = new Vector<Wall>();
+		for (Wall wall : this.innerWallsToBe) {
+			if (wall.raiseWall(raiseFor)) {
+				this.innerWalls.add(wall);
+				newFullyRaised.add(wall);
+			}
+		}
+		for (Wall wall : newFullyRaised) {
+			this.innerWallsToBe.remove(wall);
+		}
 	}
 }
 
@@ -156,7 +173,7 @@ class Wall {
 	public Wall(float width, float length, boolean parallelToX, float centerX, float centerZ) {
 		this.wallWidth = width;
 		this.wallLength = length;
-		this.wallHeight = 0.5f;
+		this.wallHeight = 0;
 		this.parallelToX = parallelToX;
 		this.centerX = centerX;
 		this.centerZ = centerZ;
@@ -172,5 +189,15 @@ class Wall {
 		}
 		ModelMatrix.main.setShaderMatrix();
 		BoxGraphic.drawSolidCube();
+	}
+
+	// Returns true if the wall has height 1 (it cannot be higher)
+	public boolean raiseWall(float raiseFor) {
+		this.wallHeight += raiseFor;
+		if (this.wallHeight > 1) {
+			this.wallHeight = 1;
+			return true;
+		}
+		return false;
 	}
 }
