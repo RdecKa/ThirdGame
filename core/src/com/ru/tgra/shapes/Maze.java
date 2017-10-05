@@ -28,7 +28,7 @@ public class Maze {
 		this.innerWallsToBe = new Vector<Wall>();
 	}
 
-	public void draw() {
+	public void draw(boolean drawWalls) {
 		// Draw cells
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
@@ -42,46 +42,48 @@ public class Maze {
 			//ModelMatrix.main.popMatrix();
 		}
 
-		// Draw outer walls
-		Gdx.gl.glUniform4f(GameEnv.colorLoc, this.wallColor.getRed(), this.wallColor.getGreen(), this.wallColor.getBlue(), this.wallColor.getAlpha());
+		if (drawWalls) {
+			// Draw outer walls
+			Gdx.gl.glUniform4f(GameEnv.colorLoc, this.wallColor.getRed(), this.wallColor.getGreen(), this.wallColor.getBlue(), this.wallColor.getAlpha());
 
-		for (int i = 0; i < 4; i++) {
-			ModelMatrix.main.loadIdentityMatrix();
-			//ModelMatrix.main.pushMatrix();
-			switch(i) {
-				case 0:
-					// (0, 0, 0) - (0, 0, 1)
-					ModelMatrix.main.addTranslation(0, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
-					ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
-					break;
-				case 1:
-					// (1, 0, 0) - (1, 0, 1)
-					ModelMatrix.main.addTranslation(this.mazeWidth * this.unit, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
-					ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
-					break;
-				case 2:
-					// (0, 0, 0) - (1, 0, 0)
-					ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, 0);
-					ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
-					break;
-				case 3:
-					// (0, 0, 1) - (1, 0, 1)
-					ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, this.mazeDepth * this.unit);
-					ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
-					break;
+			for (int i = 0; i < 4; i++) {
+				ModelMatrix.main.loadIdentityMatrix();
+				//ModelMatrix.main.pushMatrix();
+				switch (i) {
+					case 0:
+						// (0, 0, 0) - (0, 0, 1)
+						ModelMatrix.main.addTranslation(0, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
+						ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
+						break;
+					case 1:
+						// (1, 0, 0) - (1, 0, 1)
+						ModelMatrix.main.addTranslation(this.mazeWidth * this.unit, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
+						ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
+						break;
+					case 2:
+						// (0, 0, 0) - (1, 0, 0)
+						ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, 0);
+						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
+						break;
+					case 3:
+						// (0, 0, 1) - (1, 0, 1)
+						ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, this.mazeDepth * this.unit);
+						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
+						break;
 
+				}
+				ModelMatrix.main.setShaderMatrix();
+				BoxGraphic.drawSolidCube();
+				//ModelMatrix.main.popMatrix();
 			}
-			ModelMatrix.main.setShaderMatrix();
-			BoxGraphic.drawSolidCube();
-			//ModelMatrix.main.popMatrix();
-		}
 
-		// Draw inner walls
-		for (Wall wall : this.innerWalls) {
-			wall.draw(this.unit);
-		}
-		for (Wall wall : this.innerWallsToBe) {
-			wall.draw(this.unit);
+			// Draw inner walls
+			for (Wall wall : this.innerWalls) {
+				wall.draw(this.unit);
+			}
+			for (Wall wall : this.innerWallsToBe) {
+				wall.draw(this.unit);
+			}
 		}
 	}
 

@@ -12,10 +12,13 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
 	Maze maze;
+	int mazeWidth, mazeDepth;
 	Point3D playerPos;
 	Vector3D playerDir, lookDown;
 
 	Vector3D moveLeft, moveForward, up;
+
+	boolean firstPersonView;
 
 	int mouseX, mouseY;
 
@@ -24,7 +27,9 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
-		maze = new Maze(5, 8);
+		mazeWidth = 20;
+		mazeDepth = 10;
+		maze = new Maze(mazeWidth, mazeDepth);
 		playerPos = new Point3D(0.5f, 1, 0.5f);
 		playerDir = new Vector3D(1, 0, 1);
 		lookDown = new Vector3D(0, -0.5f, 0);
@@ -33,10 +38,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		moveForward = new Vector3D(0, 0, 1);
 		up = new Vector3D(0,1,0);
 
+		firstPersonView = true;
+
 		perspCamera = new PerspectiveCamera();
 
-		//ortCamera = new OrtographicCamera();
-		//ortCamera.Look3D(new Point3D(1, 1, 1.5f), new Point3D(2, 2, 1.5f), new Vector3D(0,0,1));
+		Point3D mapCameraEye = new Point3D((float)(mazeWidth/2.0), 10, (float)(mazeDepth/2.0));
+		Point3D mapCameraCenter = mapCameraEye.clone().returnAddedVector(new Vector3D(0, -5, 0));
+		System.out.println(mapCameraEye);
+		ortCamera = new OrtographicCamera();
+		ortCamera.Look3D(mapCameraEye, mapCameraCenter, new Vector3D(0,0,1));
 	}
 
 	private void input(float deltaTime)
@@ -65,6 +75,9 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 			lookDown.y -= deltaTime;
 		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+			firstPersonView = !firstPersonView;
+		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
 			maze.addRandomWall();
@@ -84,16 +97,33 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void display()
 	{
 		//do all actual drawing and rendering here
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
-		perspCamera.setShaderMatrix();
-		//ortCamera.setOrtographicProjection(-10, 10, -10, 10, -10, 100);
-		//ortCamera.setShaderMatrix();
+		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		Gdx.gl.glUniform4f(GameEnv.colorLoc, 0.9f, 0.3f, 0.1f, 1.0f);
+		if (firstPersonView) {
+			perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
+			perspCamera.setShaderMatrix();
+		} else {
 
-		maze.draw();
+		}
+
+		maze.draw(true);
+
+		// Draw a map
+		int screenWidth = Gdx.graphics.getWidth();
+		int screenHeight = Gdx.graphics.getHeight();
+		int mapWidth = mazeWidth * 10;
+		int mapHeight = mazeDepth * 10;
+		int margin = 10;
+		Gdx.gl20.glViewport(screenWidth - mapWidth - margin, screenHeight - mapHeight - margin, mapWidth, mapHeight);
+
+		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
+
+		ortCamera.setOrtographicProjection(-mazeWidth * 0.5f, mazeWidth * 0.5f, -mazeDepth * 0.5f, mazeDepth * 0.5f, 1, 10);
+		ortCamera.setShaderMatrix();
+		maze.draw(false);
 	}
 
 	@Override
