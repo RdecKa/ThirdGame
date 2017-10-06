@@ -25,7 +25,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
-		mazeWidth = 20;
+		mazeWidth = 15;
 		mazeDepth = 10;
 		maze = new Maze(mazeWidth, mazeDepth);
 
@@ -42,36 +42,39 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		Point3D mapCameraEye = new Point3D((float)(mazeWidth/2.0), 10, (float)(mazeDepth/2.0));
 		Point3D mapCameraCenter = mapCameraEye.clone().returnAddedVector(new Vector3D(0, -5, 0));
-		System.out.println(mapCameraEye);
 		ortCamera = new OrtographicCamera();
 		ortCamera.Look3D(mapCameraEye, mapCameraCenter, new Vector3D(0,0,1));
 	}
 
 	private void input(float deltaTime)
 	{
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			player.position.add(moveLeft.returnScaled(deltaTime));
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			player.position.add(moveLeft.returnScaled(- deltaTime));
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			player.position.add(moveForward.returnScaled(deltaTime));
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			player.position.add(moveForward.returnScaled(- deltaTime));
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.direction.rotateXZ(-100 * deltaTime);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.direction.rotateXZ(100 * deltaTime);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-			lookDown.y += deltaTime;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-			lookDown.y -= deltaTime;
+		if (firstPersonView) {
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+				player.position.add(moveLeft.returnScaled(deltaTime));
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+				player.position.add(moveLeft.returnScaled(-deltaTime));
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+				player.position.add(moveForward.returnScaled(deltaTime));
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+				player.position.add(moveForward.returnScaled(-deltaTime));
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+				player.direction.rotateXZ(-100 * deltaTime);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+				player.direction.rotateXZ(100 * deltaTime);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+				lookDown.y += deltaTime;
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				lookDown.y -= deltaTime;
+			}
+		} else {
+
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
 			firstPersonView = !firstPersonView;
@@ -84,11 +87,17 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-		Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
-		moveForward = player.direction;
-		moveLeft = up.cross(moveForward);
+
+		if (firstPersonView) {
+			Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
+			moveForward = player.direction;
+			moveLeft = up.cross(moveForward);
+			perspCamera.Look3D(player.position, center, up);
+		} else {
+			Point3D mapCenter = new Point3D(mazeWidth / 2, 1, mazeDepth / 2);
+			perspCamera.Look3D(mapCenter.returnAddedVector(new Vector3D(-20, 10, 0)), mapCenter, new Vector3D(1, 0, 0));
+		}
 		maze.raiseWalls(deltaTime);
-		perspCamera.Look3D(player.position, center, up);
 	}
 	
 	private void display()
@@ -99,14 +108,13 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		if (firstPersonView) {
-			perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
-			perspCamera.setShaderMatrix();
-		} else {
-
-		}
+		perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
+		perspCamera.setShaderMatrix();
 
 		maze.draw(true);
+
+		if (!firstPersonView)
+			player.draw();
 
 		// Draw a map
 		int screenWidth = Gdx.graphics.getWidth();
