@@ -29,7 +29,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		mazeDepth = 10;
 		maze = new Maze(mazeWidth, mazeDepth);
 
-		player = new Player(new Point3D(0.5f, 1, 0.5f), new Vector3D(1, 0, 1));
+		player = new Player(new Point3D(0.5f, 0.8f, 0.5f), new Vector3D(1, 0, 1));
 
 		lookDown = new Vector3D(0, -0.5f, 0);
 		moveLeft = new Vector3D(1, 0, 0);
@@ -108,7 +108,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		perspCamera.setPerspectiveProjection(60, 9.0f/16.0f, 0.1f, 100);
+		perspCamera.setPerspectiveProjection(60, 1, 0.1f, 100);
 		perspCamera.setShaderMatrix();
 
 		maze.draw(true);

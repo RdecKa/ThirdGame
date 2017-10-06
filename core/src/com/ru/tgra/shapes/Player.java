@@ -16,8 +16,8 @@ public class Player {
 	public void draw() {
 		Gdx.gl.glUniform4f(GameEnv.colorLoc, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha());
 		ModelMatrix.main.loadIdentityMatrix();
-		ModelMatrix.main.addTranslation(position.x, position.y, position.z);
-		ModelMatrix.main.addScale(0.5f, 0.5f, 0.5f);
+		ModelMatrix.main.addTranslation(position.x, position.y - 0.8f, position.z);
+		ModelMatrix.main.addScale(0.4f, 0.4f, 0.4f);
 		ModelMatrix.main.setShaderMatrix();
 		SphereGraphic.drawSolidSphere();
 	}
