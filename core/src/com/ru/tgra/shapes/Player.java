@@ -22,3 +22,14 @@ public class Player {
 		SphereGraphic.drawSolidSphere();
 	}
 }
+
+class ThirdPerson extends Player {
+	public ThirdPerson(Point3D startPosition, Vector3D startDirection) {
+		super(startPosition, startDirection);
+	}
+
+	public static ThirdPerson createThirdPerson(Point3D startPosition, Point3D center) {
+		Vector3D startDirection = Vector3D.difference(center, startPosition);
+		return new ThirdPerson(startPosition, startDirection);
+	}
+}

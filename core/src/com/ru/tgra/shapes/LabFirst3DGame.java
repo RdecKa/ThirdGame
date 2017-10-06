@@ -13,20 +13,22 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	PerspectiveCamera perspCamera;
 	Maze maze;
 	int mazeWidth, mazeDepth;
+	Point3D mapCenter;
 
 	Vector3D moveLeft, moveForward, up, lookDown;;
 
 	boolean firstPersonView;
+	float fovProjection;
 
-	Player player;
+	Player player, thirdPerson;
 
 	@Override
 	public void create () {
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
-		mazeWidth = 15;
-		mazeDepth = 10;
+		mazeWidth = 5;
+		mazeDepth = 3;
 		maze = new Maze(mazeWidth, mazeDepth);
 
 		player = new Player(new Point3D(0.5f, 0.8f, 0.5f), new Vector3D(1, 0, 1));
@@ -39,11 +41,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		firstPersonView = true;
 
 		perspCamera = new PerspectiveCamera();
+		fovProjection = 60;
 
 		Point3D mapCameraEye = new Point3D((float)(mazeWidth/2.0), 10, (float)(mazeDepth/2.0));
-		Point3D mapCameraCenter = mapCameraEye.clone().returnAddedVector(new Vector3D(0, -5, 0));
+		mapCenter = mapCameraEye.clone().returnAddedVector(new Vector3D(0, -5, 0));
+		Point3D mapCameraCenter = mapCenter;
 		ortCamera = new OrtographicCamera();
 		ortCamera.Look3D(mapCameraEye, mapCameraCenter, new Vector3D(0,0,1));
+
+		thirdPerson = ThirdPerson.createThirdPerson(mapCameraCenter.returnAddedVector(new Vector3D(-10, 10, 0)), mapCameraCenter);
 	}
 
 	private void input(float deltaTime)
@@ -74,7 +80,22 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 				lookDown.y -= deltaTime;
 			}
 		} else {
-
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+				thirdPerson.position.rotateAroundPoint(mapCenter, 100 * deltaTime);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+				thirdPerson.position.rotateAroundPoint(mapCenter, -100 * deltaTime);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+				fovProjection -= 100 * deltaTime;
+				if (fovProjection < 10)
+					fovProjection = 10;
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+				fovProjection += 100 * deltaTime;
+				if (fovProjection > 130)
+					fovProjection = 130;
+			}
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
 			firstPersonView = !firstPersonView;
@@ -87,15 +108,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-
 		if (firstPersonView) {
+			fovProjection = 60;
 			Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
 			moveForward = player.direction;
 			moveLeft = up.cross(moveForward);
 			perspCamera.Look3D(player.position, center, up);
 		} else {
 			Point3D mapCenter = new Point3D(mazeWidth / 2, 1, mazeDepth / 2);
-			perspCamera.Look3D(mapCenter.returnAddedVector(new Vector3D(-20, 10, 0)), mapCenter, new Vector3D(1, 0, 0));
+			perspCamera.Look3D(thirdPerson.position, mapCenter, new Vector3D(0, 1, 0));
 		}
 		maze.raiseWalls(deltaTime);
 	}
@@ -108,7 +129,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		perspCamera.setPerspectiveProjection(60, 1, 0.1f, 100);
+		perspCamera.setPerspectiveProjection(fovProjection, 1, 0.1f, 100);
 		perspCamera.setShaderMatrix();
 
 		maze.draw(true);

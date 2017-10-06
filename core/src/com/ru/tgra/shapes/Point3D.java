@@ -30,6 +30,13 @@ public class Point3D {
 		return p;
 	}
 
+	public void rotateAroundPoint(Point3D center, float angleDegrees) {
+		Vector3D diff = Vector3D.difference(this, center);
+		diff.rotateXZ(angleDegrees);
+		this.x = center.x + diff.x;
+		this.z = center.z + diff.z;
+	}
+
 	public Point3D clone() { return new Point3D(x, y, z); }
 
 	@Override

@@ -74,4 +74,9 @@ public class Vector3D {
 		x = newX;
 		z = newZ;
 	}
+
+	@Override
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+	}
 }
