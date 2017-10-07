@@ -15,7 +15,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	int mazeWidth, mazeDepth;
 	Point3D mapCenter;
 
-	Vector3D moveLeft, moveForward, up, lookDown;;
+	Vector3D moveLeft, moveForward, up, lookDown, moveFor;
 
 	boolean firstPersonView;
 	float fovProjection;
@@ -37,11 +37,12 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		moveLeft = new Vector3D(1, 0, 0);
 		moveForward = new Vector3D(0, 0, 1);
 		up = new Vector3D(0,1,0);
+		moveFor = new Vector3D(0, 0, 0);
 
 		firstPersonView = true;
 
 		perspCamera = new PerspectiveCamera();
-		fovProjection = 60;
+		fovProjection = 130;
 
 		Point3D mapCameraEye = new Point3D((float)(mazeWidth/2.0), 10, (float)(mazeDepth/2.0));
 		mapCenter = mapCameraEye.clone().returnAddedVector(new Vector3D(0, -5, 0));
@@ -55,18 +56,24 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void input(float deltaTime)
 	{
 		if (firstPersonView) {
+			moveFor = new Vector3D(0, 0, 0);
 			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-				player.move(moveLeft.returnScaled(deltaTime), maze);
+				//player.move(moveLeft.returnScaled(deltaTime), maze);
+				moveFor.add(moveLeft);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-				player.move(moveLeft.returnScaled(-deltaTime), maze);
+				//player.move(moveLeft.returnScaled(-deltaTime), maze);
+				moveFor.add(moveLeft.returnScaled(-1));
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-				player.move(moveForward.returnScaled(deltaTime), maze);
+				//player.move(moveForward.returnScaled(deltaTime), maze);
+				moveFor.add(moveForward);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-				player.move(moveForward.returnScaled(-deltaTime), maze);
+				//player.move(moveForward.returnScaled(-deltaTime), maze);
+				moveFor.add(moveForward.returnScaled(-1));
 			}
+			moveFor.scale(deltaTime);
 			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 				player.direction.rotateXZ(-100 * deltaTime);
 			}
@@ -109,6 +116,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void update(float deltaTime)
 	{
 		if (firstPersonView) {
+			player.move(moveFor, maze);
 			fovProjection = 60;
 			Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
 			moveForward = player.direction;

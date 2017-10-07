@@ -12,6 +12,7 @@ public class Maze {
 	private Color wallColor;
 	private Vector<Wall> innerWalls, innerWallsToBe;
 	private static Random rand = new Random();
+	private float wallWidth;
 
 	public Maze(int mazeWidth, int mazeDepth) {
 		this.mazeWidth = mazeWidth;
@@ -26,6 +27,7 @@ public class Maze {
 		this.wallColor = new Color(0.5f, 0.5f, 0.5f, 1);
 		this.innerWalls = new Vector<Wall>();
 		this.innerWallsToBe = new Vector<Wall>();
+		this.wallWidth = 0.1f;
 	}
 
 	public void draw(boolean drawWalls) {
@@ -33,7 +35,7 @@ public class Maze {
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
 			ModelMatrix.main.addTranslation(0.5f * this.unit, 0, (z + 0.5f) * this.unit);
-			ModelMatrix.main.addScale(this.unit, 0.1f * this.unit, this.unit);
+			ModelMatrix.main.addScale(this.unit, this.wallWidth * this.unit, this.unit);
 			for (int x = 0; x < mazeWidth; x++) {
 				this.maze[z][x].draw();
 				ModelMatrix.main.addTranslation(1, 0, 0);
@@ -50,22 +52,22 @@ public class Maze {
 					case 0:
 						// (0, 0, 0) - (0, 0, 1)
 						ModelMatrix.main.addTranslation(0, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
-						ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
+						ModelMatrix.main.addScale(this.wallWidth * this.unit, this.unit, this.mazeDepth * this.unit);
 						break;
 					case 1:
 						// (1, 0, 0) - (1, 0, 1)
 						ModelMatrix.main.addTranslation(this.mazeWidth * this.unit, 0.55f * this.unit, 0.5f * this.mazeDepth * this.unit);
-						ModelMatrix.main.addScale(0.1f * this.unit, this.unit, this.mazeDepth * this.unit);
+						ModelMatrix.main.addScale(this.wallWidth * this.unit, this.unit, this.mazeDepth * this.unit);
 						break;
 					case 2:
 						// (0, 0, 0) - (1, 0, 0)
 						ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, 0);
-						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
+						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, this.wallWidth * this.unit);
 						break;
 					case 3:
 						// (0, 0, 1) - (1, 0, 1)
 						ModelMatrix.main.addTranslation(0.5f * this.mazeWidth * this.unit, 0.55f * this.unit, this.mazeDepth * this.unit);
-						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, 0.1f * this.unit);
+						ModelMatrix.main.addScale(this.mazeWidth * this.unit, this.unit, this.wallWidth * this.unit);
 						break;
 
 				}
@@ -113,6 +115,24 @@ public class Maze {
 			this.innerWallsToBe.remove(wall);
 		}
 	}
+
+	public boolean hasNorthWall(int x, int z) {
+		if (x < 0 || x >= this.mazeWidth || z < 0 || z >= this.mazeDepth) {
+			return true;
+		}
+		return this.maze[z][x].hasNorthWall();
+	}
+
+	public  boolean hasEastWall(int x, int z) {
+		if (x < 0 || x >= this.mazeWidth || z < 0 || z >= this.mazeDepth) {
+			return true;
+		}
+		return this.maze[z][x].hasEastWall();
+	}
+
+	public float getWallWidth() {
+		return wallWidth;
+	}
 }
 
 class Cell {
@@ -122,6 +142,7 @@ class Cell {
 	private static Random rand = new Random();
 	private int posX, posZ;
 	private int unit;
+	private float wallWidth;
 
 	public Cell(int x, int z, int unit, boolean northRow, boolean eastRow) {
 		this.floorColor = new Color();
@@ -130,6 +151,7 @@ class Cell {
 		this.posX = x;
 		this.posZ = z;
 		this.unit = unit;
+		this.wallWidth = 0.1f;
 	}
 
 	public void draw() {
@@ -140,11 +162,11 @@ class Cell {
 
 	private Wall addNorthWall() {
 		this.northWall = true;
-		return new Wall(this.unit * 0.1f, this.unit, true,(this.posX + 0.5f) * this.unit, (this.posZ + 1) * this.unit);
+		return new Wall(this.unit * this.wallWidth, this.unit, true,(this.posX + 0.5f) * this.unit, (this.posZ + 1) * this.unit);
 	}
 	private Wall addEastWall() {
 		this.eastWall = true;
-		return new Wall(this.unit * 0.1f, this.unit, false,(this.posX + 1) * this.unit, (this.posZ + 0.5f) * this.unit);
+		return new Wall(this.unit * this.wallWidth, this.unit, false,(this.posX + 1) * this.unit, (this.posZ + 0.5f) * this.unit);
 	}
 
 	// Returns true if wall was added, false otherwise
@@ -165,6 +187,14 @@ class Cell {
 			newWall = addEastWall();
 		}
 		return newWall;
+	}
+
+	public boolean hasNorthWall() {
+		return northWall;
+	}
+
+	public boolean hasEastWall() {
+		return eastWall;
 	}
 }
 

@@ -24,9 +24,47 @@ public class Player {
 		SphereGraphic.drawSolidSphere();
 	}
 
-	public void move(Vector3D moveFor, Maze maze) {
+	public void move(Vector3D moveForOrig, Maze maze) {
+		Vector3D moveFor = moveForOrig.clone();
 		int currentX = (int) this.position.x;
 		int currentZ = (int) this.position.z;
+		float wallWidth = maze.getWallWidth() / 2;
+
+		// Check hitting walls directly
+		if (moveFor.x >= 0 && this.position.x + this.radius > (currentX + 1 - wallWidth) && maze.hasEastWall(currentX, currentZ)) {
+			moveFor.x = 0;
+		} else if (moveFor.x <= 0 && this.position.x - this.radius < (currentX + wallWidth) && maze.hasEastWall(currentX - 1, currentZ)) {
+			moveFor.x = 0;
+		}
+		if (moveFor.z >= 0 && this.position.z + this.radius > (currentZ + 1 - wallWidth) && maze.hasNorthWall(currentX, currentZ)) {
+			moveFor.z = 0;
+		} else if (moveFor.z <= 0 && this.position.z - this.radius < (currentZ + wallWidth) && maze.hasNorthWall(currentX, currentZ - 1)) {
+			moveFor.z = 0;
+		}
+
+		// Check hitting walls from the side
+		if (moveFor.x > 0 && this.position.x + this.radius * 0.95f > (currentX + 1) && this.position.z < (currentZ + wallWidth) && maze.hasNorthWall(currentX + 1, currentZ - 1) ||
+			moveFor.x > 0 && this.position.x + this.radius * 0.95f > (currentX + 1) && this.position.z > (currentZ + 1 - wallWidth) && maze.hasNorthWall(currentX + 1, currentZ) ||
+			moveFor.x < 0 && this.position.x - this.radius * 0.95f < currentX && this.position.z < (currentZ + wallWidth) && maze.hasNorthWall(currentX - 1, currentZ - 1) ||
+			moveFor.x < 0 && this.position.x - this.radius * 0.95f < currentX && this.position.z > (currentZ + 1 - wallWidth) && maze.hasNorthWall(currentX - 1, currentZ) ||
+			moveFor.x > 0 && maze.hasNorthWall(currentX + 1, currentZ - 1) && this.position.getXZDistanceTo(new Point3D(currentX + 1, 0, currentZ + wallWidth)) < this.radius * 0.95f ||
+			moveFor.x > 0 && maze.hasNorthWall(currentX + 1, currentZ) && this.position.getXZDistanceTo(new Point3D(currentX + 1, 0, currentZ + 1 - wallWidth)) < this.radius * 0.95f ||
+			moveFor.x < 0 && maze.hasNorthWall(currentX - 1, currentZ - 1) && this.position.getXZDistanceTo(new Point3D(currentX, 0, currentZ + wallWidth)) < this.radius * 0.95f ||
+			moveFor.x < 0 && maze.hasNorthWall(currentX - 1, currentZ) && this.position.getXZDistanceTo(new Point3D(currentX, 0, currentZ + 1 - wallWidth)) < this.radius * 0.95f) {
+			moveFor.x = 0;
+		}
+
+		if (moveFor.z > 0 && this.position.z + this.radius * 0.95f > (currentZ + 1) && this.position.x < (currentX + wallWidth) && maze.hasEastWall(currentX - 1, currentZ + 1) ||
+			moveFor.z > 0 && this.position.z + this.radius * 0.95f > (currentZ + 1) && this.position.x > (currentX + 1 - wallWidth) && maze.hasEastWall(currentX, currentZ + 1) ||
+			moveFor.z < 0 && this.position.z - this.radius * 0.95f < currentZ && this.position.x < (currentX + wallWidth) && maze.hasEastWall(currentX - 1, currentZ - 1) ||
+			moveFor.z < 0 && this.position.z - this.radius * 0.95f < currentZ && this.position.x > (currentX + 1 - wallWidth) && maze.hasEastWall(currentX, currentZ - 1) ||
+			moveFor.z > 0 && maze.hasEastWall(currentX -1, currentZ + 1) && this.position.getXZDistanceTo(new Point3D(currentX + wallWidth, 0, currentZ + 1)) < this.radius * 0.95f ||
+			moveFor.z > 0 && maze.hasEastWall(currentX, currentZ + 1) && this.position.getXZDistanceTo(new Point3D(currentX + 1 - wallWidth, 0, currentZ + 1)) < this.radius * 0.95f ||
+			moveFor.z < 0 && maze.hasEastWall(currentX - 1, currentZ - 1) && this.position.getXZDistanceTo(new Point3D(currentX + wallWidth, 0, currentZ)) < this.radius * 0.95f ||
+			moveFor.z < 0 && maze.hasEastWall(currentX, currentZ - 1) && this.position.getXZDistanceTo(new Point3D(currentX + 1 - wallWidth, 0, currentZ)) < this.radius * 0.95f) {
+			moveFor.z = 0;
+		}
+
 		this.position.add(moveFor);
 		int newX = (int) this.position.x;
 		int newZ = (int) this.position.z;

@@ -37,6 +37,10 @@ public class Point3D {
 		this.z = center.z + diff.z;
 	}
 
+	public float getXZDistanceTo(Point3D p) {
+		return (float) Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.z - this.z, 2));
+	}
+
 	public Point3D clone() { return new Point3D(x, y, z); }
 
 	@Override
