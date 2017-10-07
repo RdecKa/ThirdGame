@@ -32,14 +32,12 @@ public class Maze {
 		// Draw cells
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
-			//ModelMatrix.main.pushMatrix();
 			ModelMatrix.main.addTranslation(0.5f * this.unit, 0, (z + 0.5f) * this.unit);
 			ModelMatrix.main.addScale(this.unit, 0.1f * this.unit, this.unit);
 			for (int x = 0; x < mazeWidth; x++) {
 				this.maze[z][x].draw();
 				ModelMatrix.main.addTranslation(1, 0, 0);
 			}
-			//ModelMatrix.main.popMatrix();
 		}
 
 		if (drawWalls) {
@@ -48,7 +46,6 @@ public class Maze {
 
 			for (int i = 0; i < 4; i++) {
 				ModelMatrix.main.loadIdentityMatrix();
-				//ModelMatrix.main.pushMatrix();
 				switch (i) {
 					case 0:
 						// (0, 0, 0) - (0, 0, 1)
@@ -74,7 +71,6 @@ public class Maze {
 				}
 				ModelMatrix.main.setShaderMatrix();
 				BoxGraphic.drawSolidCube();
-				//ModelMatrix.main.popMatrix();
 			}
 
 			// Draw inner walls
@@ -98,6 +94,11 @@ public class Maze {
 		}
 		if (newWall != null)
 			this.innerWallsToBe.add(newWall);
+	}
+
+	public void addRandomWalls(int n) {
+		for (int i = 0; i < n; i++)
+			this.addRandomWall();
 	}
 
 	public void raiseWalls(float raiseFor) {

@@ -27,8 +27,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
-		mazeWidth = 5;
-		mazeDepth = 3;
+		mazeWidth = 10;
+		mazeDepth = 7;
 		maze = new Maze(mazeWidth, mazeDepth);
 
 		player = new Player(new Point3D(0.5f, 0.8f, 0.5f), new Vector3D(1, 0, 1));
@@ -56,16 +56,16 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	{
 		if (firstPersonView) {
 			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-				player.position.add(moveLeft.returnScaled(deltaTime));
+				player.move(moveLeft.returnScaled(deltaTime), maze);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-				player.position.add(moveLeft.returnScaled(-deltaTime));
+				player.move(moveLeft.returnScaled(-deltaTime), maze);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-				player.position.add(moveForward.returnScaled(deltaTime));
+				player.move(moveForward.returnScaled(deltaTime), maze);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-				player.position.add(moveForward.returnScaled(-deltaTime));
+				player.move(moveForward.returnScaled(-deltaTime), maze);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 				player.direction.rotateXZ(-100 * deltaTime);
