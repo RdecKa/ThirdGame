@@ -24,10 +24,15 @@ public class Player {
 		SphereGraphic.drawSolidSphere();
 	}
 
-	public void move(Vector3D moveForOrig, Maze maze) {
+	public boolean move(Vector3D moveForOrig, Maze maze) {
 		Vector3D moveFor = moveForOrig.clone();
 		int currentX = (int) this.position.x;
 		int currentZ = (int) this.position.z;
+
+		if (currentX == maze.getMazeWidth() - 1 && currentZ == maze.getMazeDepth() - 1) {
+			return true;
+		}
+
 		float wallWidth = maze.getWallWidth() / 2;
 
 		// Check hitting walls directly
@@ -69,8 +74,10 @@ public class Player {
 		int newX = (int) this.position.x;
 		int newZ = (int) this.position.z;
 		if (currentX != newX || currentZ != newZ) {
-			maze.addRandomWalls(2);
+			maze.addRandomWalls(LabFirst3DGame.numWallsAtOnce);
 		}
+
+		return false;
 	}
 }
 

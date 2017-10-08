@@ -133,6 +133,8 @@ public class Maze {
 	public float getWallWidth() {
 		return wallWidth;
 	}
+	public int getMazeDepth() { return mazeDepth; }
+	public int getMazeWidth() { return mazeWidth; }
 }
 
 class Cell {

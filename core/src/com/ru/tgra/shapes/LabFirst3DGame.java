@@ -22,16 +22,50 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 	Player player, thirdPerson;
 
+	boolean win;
+	public static int level, numWallsAtOnce;
+
 	@Override
 	public void create () {
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init();
 
-		mazeWidth = 10;
-		mazeDepth = 7;
+		level = 1;
+		initLevel(level);
+	}
+
+	private void initLevel(int level) {
+		switch (level) {
+			case 1: {
+				mazeWidth = 3;
+				mazeDepth = 4;
+				numWallsAtOnce = 1;
+				break;
+			}
+			case 2: {
+				mazeWidth = 6;
+				mazeDepth = 5;
+				numWallsAtOnce = 2;
+				break;
+			}
+			case 3: {
+				mazeWidth = 10;
+				mazeDepth = 8;
+				numWallsAtOnce = 3;
+				break;
+			}
+			default: {
+				mazeWidth = 12;
+				mazeDepth = 14;
+				numWallsAtOnce = 4;
+			}
+		}
+
 		maze = new Maze(mazeWidth, mazeDepth);
 
 		player = new Player(new Point3D(0.5f, 0.8f, 0.5f), new Vector3D(1, 0, 1));
+
+		win = false;
 
 		lookDown = new Vector3D(0, -0.5f, 0);
 		moveLeft = new Vector3D(1, 0, 0);
@@ -103,16 +137,20 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
 			firstPersonView = !firstPersonView;
 		}
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-			maze.addRandomWall();
+		if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+			initLevel(level);
 		}
 	}
 	
 	private void update(float deltaTime)
 	{
+		if (win) {
+			initLevel(++level);
+			win = false;
+		}
+
 		if (firstPersonView) {
-			player.move(moveFor, maze);
+			win = player.move(moveFor, maze);
 			fovProjection = 60;
 			Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
 			moveForward = player.direction;
@@ -130,6 +168,10 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		//do all actual drawing and rendering here
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+		if (win) {
+			return;
+		}
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
