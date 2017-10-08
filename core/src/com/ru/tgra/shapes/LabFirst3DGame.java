@@ -57,33 +57,29 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	{
 		if (firstPersonView) {
 			moveFor = new Vector3D(0, 0, 0);
-			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-				//player.move(moveLeft.returnScaled(deltaTime), maze);
+			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 				moveFor.add(moveLeft);
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-				//player.move(moveLeft.returnScaled(-deltaTime), maze);
+			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 				moveFor.add(moveLeft.returnScaled(-1));
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-				//player.move(moveForward.returnScaled(deltaTime), maze);
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 				moveFor.add(moveForward);
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-				//player.move(moveForward.returnScaled(-deltaTime), maze);
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 				moveFor.add(moveForward.returnScaled(-1));
 			}
 			moveFor.scale(deltaTime);
-			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				player.direction.rotateXZ(-100 * deltaTime);
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 				player.direction.rotateXZ(100 * deltaTime);
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 				lookDown.y += deltaTime;
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 				lookDown.y -= deltaTime;
 			}
 		} else {
