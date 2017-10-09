@@ -99,14 +99,23 @@ public class Maze {
 		BoxGraphic.drawSolidCube();
 	}
 
-	public void addRandomWall() {
+	private void addRandomWall(int curX, int curZ) {
 		Wall newWall = null;
 		int safetyCounter = this.mazeDepth * this.mazeWidth * 10;
+		int forbidden[][] = new int[7][2];
+		forbidden[0][0] = this.mazeWidth - 2; forbidden[0][1] = this.mazeDepth - 1;
+		forbidden[1][0] = this.mazeWidth - 1; forbidden[1][1] = this.mazeDepth - 2;
+		forbidden[2][0] = curX; forbidden[2][1] = curZ;
+		forbidden[3][0] = curX; forbidden[3][1] = curZ - 1;
+		forbidden[4][0] = curX; forbidden[4][1] = curZ + 1;
+		forbidden[5][0] = curX - 1; forbidden[5][1] = curZ;
+		forbidden[6][0] = curX + 1; forbidden[6][1] = curZ;
 		while (newWall == null && safetyCounter > 0) {
 			int z = rand.nextInt(this.mazeDepth);
 			int x = rand.nextInt(this.mazeWidth);
-			if (x == this.mazeWidth - 2 && z == this.mazeDepth - 1 || x == this.mazeWidth -1 && z == this.mazeDepth - 2)
+			if (!isAllowed(x, z, forbidden))
 				continue;
+
 			newWall = maze[z][x].addWall();
 			safetyCounter--;
 		}
@@ -114,9 +123,17 @@ public class Maze {
 			this.innerWallsToBe.add(newWall);
 	}
 
-	public void addRandomWalls(int n) {
+	private boolean isAllowed(int x, int z, int[][] forbidden) {
+		for (int i = 0; i < forbidden.length; i++) {
+			if (x == forbidden[i][0] && z == forbidden[i][1])
+				return false;
+		}
+		return true;
+	}
+
+	public void addRandomWalls(int n, int curX, int curZ) {
 		for (int i = 0; i < n; i++)
-			this.addRandomWall();
+			this.addRandomWall(curX, curZ);
 	}
 
 	public void raiseWalls(float raiseFor) {
