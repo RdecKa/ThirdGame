@@ -1,6 +1,7 @@
 package com.ru.tgra.shapes;
 
 import com.badlogic.gdx.Gdx;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.util.Random;
 import java.util.Vector;
@@ -13,6 +14,7 @@ public class Maze {
 	private Vector<Wall> innerWalls, innerWallsToBe;
 	private static Random rand = new Random();
 	private float wallWidth;
+	private float goalBoxAngle;
 
 	public Maze(int mazeWidth, int mazeDepth) {
 		this.mazeWidth = mazeWidth;
@@ -28,6 +30,7 @@ public class Maze {
 		this.innerWalls = new Vector<Wall>();
 		this.innerWallsToBe = new Vector<Wall>();
 		this.wallWidth = 0.1f;
+		this.goalBoxAngle = 0;
 	}
 
 	public void draw(boolean drawWalls) {
@@ -83,6 +86,17 @@ public class Maze {
 				wall.draw(this.unit);
 			}
 		}
+
+		// Draw goal
+		Gdx.gl.glUniform4f(GameEnv.colorLoc, 1, 1, 1, 1);
+		ModelMatrix.main.loadIdentityMatrix();
+		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));
+		ModelMatrix.main.addScale(0.4f, 0.4f, 0.4f);
+		ModelMatrix.main.addRotationZ(this.goalBoxAngle);
+		ModelMatrix.main.addRotationX(this.goalBoxAngle);
+		ModelMatrix.main.addRotationY(this.goalBoxAngle);
+		ModelMatrix.main.setShaderMatrix();
+		BoxGraphic.drawSolidCube();
 	}
 
 	public void addRandomWall() {
@@ -91,6 +105,8 @@ public class Maze {
 		while (newWall == null && safetyCounter > 0) {
 			int z = rand.nextInt(this.mazeDepth);
 			int x = rand.nextInt(this.mazeWidth);
+			if (x == this.mazeWidth - 2 && z == this.mazeDepth - 1 || x == this.mazeWidth -1 && z == this.mazeDepth - 2)
+				continue;
 			newWall = maze[z][x].addWall();
 			safetyCounter--;
 		}
@@ -114,6 +130,11 @@ public class Maze {
 		for (Wall wall : newFullyRaised) {
 			this.innerWallsToBe.remove(wall);
 		}
+	}
+
+	public void incrementAngle(float angle) {
+		this.goalBoxAngle += angle;
+		this.goalBoxAngle %= 360;
 	}
 
 	public boolean hasNorthWall(int x, int z) {
