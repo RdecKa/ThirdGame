@@ -1,10 +1,11 @@
 package com.ru.tgra.shapes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.BufferUtils;
 
+import java.nio.FloatBuffer;
+
 public class PerspectiveCamera extends Camera {
-	public void PerspctiveProjection3D() {
+	public FloatBuffer getProjectionMatrix() {
 		float[] pm = new float[16];
 
 		pm[0] = 2 * near / (right - left); pm[4] = 0.0f; pm[8] = (right + left) / (right - left); pm[12] = 0.0f;
@@ -12,10 +13,11 @@ public class PerspectiveCamera extends Camera {
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] = -(far + near) / (far - near); pm[14] = -2 * far * near / (far - near);
 		pm[3] = 0.0f; pm[7] = 0.0f; pm[11] = -1.0f; pm[15] = 0.0f;
 
-		GameEnv.matrixBuffer = BufferUtils.newFloatBuffer(16);
-		GameEnv.matrixBuffer.put(pm);
-		GameEnv.matrixBuffer.rewind();
-		Gdx.gl.glUniformMatrix4fv(GameEnv.projectionMatrixLoc, 1, false, GameEnv.matrixBuffer);
+		matrixBuffer = BufferUtils.newFloatBuffer(16);
+		matrixBuffer.put(pm);
+		matrixBuffer.rewind();
+
+		return matrixBuffer;
 	}
 
 	public void setPerspectiveProjection(float fov, float ratio, float near, float far) {
@@ -27,10 +29,5 @@ public class PerspectiveCamera extends Camera {
 		this.left = -right;
 		this.near = near;
 		this.far = far;
-	}
-
-	@Override
-	protected void setProjection() {
-		PerspctiveProjection3D();
 	}
 }

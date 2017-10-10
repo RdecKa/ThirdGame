@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.BufferUtils;
 public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor {
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
+	Shader3D shader;
+
 	Maze maze;
 	int mazeWidth, mazeDepth;
 	Point3D mapCenter;
@@ -27,8 +29,9 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 	@Override
 	public void create () {
+		shader = new Shader3D();
 		Gdx.input.setInputProcessor(this);
-		GameEnv.init();
+		GameEnv.init(shader);
 
 		level = 1;
 		initLevel(level);
@@ -177,12 +180,13 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		perspCamera.setPerspectiveProjection(fovProjection, 1, 0.1f, 100);
-		perspCamera.setShaderMatrix();
+		shader.setViewMatrix(perspCamera.getViewMatrix());
+		shader.setProjectionMatrix(perspCamera.getProjectionMatrix());
 
-		maze.draw(true);
+		maze.draw(true, shader, perspCamera);
 
 		if (!firstPersonView)
-			player.draw();
+			player.draw(shader, perspCamera);
 
 		// Draw a map
 		int screenWidth = Gdx.graphics.getWidth();
@@ -195,9 +199,11 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
 
 		ortCamera.setOrtographicProjection(-mazeWidth * 0.5f, mazeWidth * 0.5f, -mazeDepth * 0.5f, mazeDepth * 0.5f, 1, 10);
-		ortCamera.setShaderMatrix();
-		maze.draw(false);
-		player.draw();
+		shader.setViewMatrix(ortCamera.getViewMatrix());
+		shader.setProjectionMatrix(ortCamera.getProjectionMatrix());
+
+		maze.draw(false, shader, ortCamera);
+		player.draw(shader, ortCamera);
 	}
 
 	@Override

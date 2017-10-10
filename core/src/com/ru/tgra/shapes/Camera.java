@@ -1,12 +1,14 @@
 package com.ru.tgra.shapes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.BufferUtils;
+
+import java.nio.FloatBuffer;
 
 public abstract class Camera {
 	public Point3D eye;
 	public Vector3D u, v, n;
 	protected float left, right, top, bottom, near, far;
+	FloatBuffer matrixBuffer;
 
 	public void Look3D(Point3D ey, Point3D center, Vector3D up) {
 		eye = ey;
@@ -17,7 +19,9 @@ public abstract class Camera {
 		v = n.cross(u);
 	}
 
-	public void setShaderMatrix() {
+	public abstract FloatBuffer getProjectionMatrix();
+
+	public FloatBuffer getViewMatrix() {
 		Vector3D minusEye = new Vector3D(-eye.x, -eye.y, -eye.z);
 
 		float[] pm = new float[16];
@@ -27,15 +31,12 @@ public abstract class Camera {
 		pm[2] = n.x; pm[6] = n.y; pm[10] = n.z; pm[14] = minusEye.dot(n);
 		pm[3] = 0.0f; pm[7] = 0.0f; pm[11] = 0.0f; pm[15] = 1.0f;
 
-		GameEnv.matrixBuffer = BufferUtils.newFloatBuffer(16);
-		GameEnv.matrixBuffer.put(pm);
-		GameEnv.matrixBuffer.rewind();
-		Gdx.gl.glUniformMatrix4fv(GameEnv.viewMatrixLoc, 1, false, GameEnv.matrixBuffer);
+		matrixBuffer = BufferUtils.newFloatBuffer(16);
+		matrixBuffer.put(pm);
+		matrixBuffer.rewind();
 
-		setProjection();
+		return  matrixBuffer;
 	}
-
-	protected abstract void setProjection();
 
 	public void slide(float delU, float delV, float delN) {
 		eye.x += delU * u.x + delV * v.x + delN * n.x;

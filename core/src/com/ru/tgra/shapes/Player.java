@@ -1,6 +1,7 @@
 package com.ru.tgra.shapes;
 
 import com.badlogic.gdx.Gdx;
+import sun.security.provider.SHA;
 
 public class Player {
 	public Point3D position;
@@ -15,12 +16,14 @@ public class Player {
 		this.radius = 0.4f;
 	}
 
-	public void draw() {
-		Gdx.gl.glUniform4f(GameEnv.colorLoc, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha());
+	public void draw(Shader3D shader, Camera camera) {
+		//Gdx.gl.glUniform4f(GameEnv.colorLoc, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha());
+		shader.setColor(this.color);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(position.x, position.y - 2 * this.radius, position.z);
 		ModelMatrix.main.addScale(this.radius, this.radius, this.radius);
-		ModelMatrix.main.setShaderMatrix();
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+
 		SphereGraphic.drawSolidSphere();
 	}
 

@@ -1,8 +1,5 @@
 package com.ru.tgra.shapes;
 
-import com.badlogic.gdx.Gdx;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import java.util.Random;
 import java.util.Vector;
 
@@ -33,21 +30,21 @@ public class Maze {
 		this.goalBoxAngle = 0;
 	}
 
-	public void draw(boolean drawWalls) {
+	public void draw(boolean drawWalls, Shader3D shader, Camera camera) {
 		// Draw cells
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
 			ModelMatrix.main.addTranslation(0.5f * this.unit, 0, (z + 0.5f) * this.unit);
 			ModelMatrix.main.addScale(this.unit, this.wallWidth * this.unit, this.unit);
 			for (int x = 0; x < mazeWidth; x++) {
-				this.maze[z][x].draw();
+				this.maze[z][x].draw(shader, camera);
 				ModelMatrix.main.addTranslation(1, 0, 0);
 			}
 		}
 
 		if (drawWalls) {
 			// Draw outer walls
-			Gdx.gl.glUniform4f(GameEnv.colorLoc, this.wallColor.getRed(), this.wallColor.getGreen(), this.wallColor.getBlue(), this.wallColor.getAlpha());
+			shader.setColor(this.wallColor);
 
 			for (int i = 0; i < 4; i++) {
 				ModelMatrix.main.loadIdentityMatrix();
@@ -74,28 +71,28 @@ public class Maze {
 						break;
 
 				}
-				ModelMatrix.main.setShaderMatrix();
+				shader.setModelMatrix(ModelMatrix.main.getMatrix());
 				BoxGraphic.drawSolidCube();
 			}
 
 			// Draw inner walls
 			for (Wall wall : this.innerWalls) {
-				wall.draw(this.unit);
+				wall.draw(this.unit, shader, camera);
 			}
 			for (Wall wall : this.innerWallsToBe) {
-				wall.draw(this.unit);
+				wall.draw(this.unit, shader, camera);
 			}
 		}
 
 		// Draw goal
-		Gdx.gl.glUniform4f(GameEnv.colorLoc, 1, 1, 1, 1);
+		shader.setColor(new Color(1, 1, 1, 1));
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));
 		ModelMatrix.main.addScale(0.4f, 0.4f, 0.4f);
 		ModelMatrix.main.addRotationZ(this.goalBoxAngle);
 		ModelMatrix.main.addRotationX(this.goalBoxAngle);
 		ModelMatrix.main.addRotationY(this.goalBoxAngle);
-		ModelMatrix.main.setShaderMatrix();
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		BoxGraphic.drawSolidCube();
 	}
 
@@ -194,9 +191,9 @@ class Cell {
 		this.wallWidth = 0.1f;
 	}
 
-	public void draw() {
-		Gdx.gl.glUniform4f(GameEnv.colorLoc, this.floorColor.getRed(), this.floorColor.getGreen(), this.floorColor.getBlue(), this.floorColor.getAlpha());
-		ModelMatrix.main.setShaderMatrix();
+	public void draw(Shader3D shader, Camera camera) {
+		shader.setColor(this.floorColor);
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		BoxGraphic.drawSolidCube();
 	}
 
@@ -252,7 +249,7 @@ class Wall {
 		this.centerZ = centerZ;
 	}
 
-	public void draw(int unit) {
+	public void draw(int unit, Shader3D shader, Camera camera) {
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.centerX * unit, (this.wallHeight / 2 + 0.05f) * unit, this.centerZ * unit);
 		if (this.parallelToX) {
@@ -260,7 +257,7 @@ class Wall {
 		} else {
 			ModelMatrix.main.addScale(this.wallWidth * unit, this.wallHeight * unit, this.wallLength);
 		}
-		ModelMatrix.main.setShaderMatrix();
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		BoxGraphic.drawSolidCube();
 	}
 
