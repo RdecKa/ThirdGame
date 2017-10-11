@@ -18,6 +18,7 @@ public class Shader3D {
 	public static int projectionMatrixLoc;
 
 	public static int eyePosLoc;
+	public static int useLightLoc;
 
 	//public static int colorLoc;
 	public static int lightPosLoc;
@@ -63,6 +64,7 @@ public class Shader3D {
 		projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
 
 		eyePosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_eyePosition");
+		useLightLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_useLight");
 
 		//colorLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
 		lightPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
@@ -82,6 +84,14 @@ public class Shader3D {
 	}
 	public void setEyePosition(Point3D p) {
 		Gdx.gl.glUniform4f(eyePosLoc, p.x, p.y, p.z, 1.0f);
+	}
+
+	public void setLightsUsed(boolean diff, boolean spec, boolean amb) {
+		float diffF = diff ? 1 : 0;
+		float specF = spec ? 1 : 0;
+		float ambF = amb ? 1 : 0;
+		System.out.println(diffF + " " +  specF + " " + ambF);
+		Gdx.gl.glUniform3f(useLightLoc, diffF, specF, ambF);
 	}
 
 	public void setLightDiffuse(Color c) {
