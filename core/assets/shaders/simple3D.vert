@@ -47,7 +47,8 @@ void main()
 	float phong = dot(normal, h) / (length(normal) * length(h));
 
 	vec4 diffuseColor = lambert * u_lightColor * u_materialDiffuse;
-    vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * vec4(1, 1, 1, 1);
+    //vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * vec4(1, 1, 1, 1);
+    vec4 specularColor = vec4(0, 0, 0, 0);
     vec4 light1 = diffuseColor + specularColor;
 
 	v_color = globalAmbient * u_materialDiffuse + light1;

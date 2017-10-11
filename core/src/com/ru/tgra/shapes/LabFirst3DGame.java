@@ -87,7 +87,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		thirdPerson = ThirdPerson.createThirdPerson(mapCameraCenter.returnAddedVector(new Vector3D(-10, 10, 0)), mapCameraCenter);
 
-		lightPos1 = new Point3D(1, 1, 1);
+		lightPos1 = new Point3D(mazeWidth - 1, 2, mazeDepth - 1);
 		lightCol1 = new Color(1, 1, 1, 1);
 
 		shader.setGlobalAmbient(new Color(0.2f, 0.2f, 0.2f, 1));
@@ -146,7 +146,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
 			initLevel(level);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
+		/*if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
 			lightPos1.x += deltaTime * 10;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
@@ -163,7 +163,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
 			lightPos1.y -= deltaTime * 10;
-		}
+		}*/
 
 	}
 	
@@ -214,12 +214,12 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		maze.draw(true, shader);
 
 		//
-		ModelMatrix.main.loadIdentityMatrix();
+		/*ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
 		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		shader.setMaterialDiffuse(lightCol1);
-		SphereGraphic.drawSolidSphere();
+		SphereGraphic.drawSolidSphere();*/
 		//
 
 		if (!firstPersonView)
@@ -245,11 +245,11 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		player.draw(shader);
 
 		//
-		ModelMatrix.main.loadIdentityMatrix();
+		/*ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
 		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		shader.setMaterialDiffuse(lightCol1);
-		SphereGraphic.drawSolidSphere();
+		SphereGraphic.drawSolidSphere();*/
 		//
 	}
 
