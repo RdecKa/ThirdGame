@@ -18,11 +18,12 @@ public class Shader3D {
 	public static int projectionMatrixLoc;
 
 	public static int eyePosLoc;
-	public static int useLightLoc;
+	//public static int useLightLoc;
+	public static int globalAmbient;
 
 	//public static int colorLoc;
 	public static int lightPosLoc;
-	public static int lightDiffLoc;
+	public static int lightColLoc;
 	public static int matDiffLoc;
 	public static int matShinLoc;
 
@@ -64,11 +65,12 @@ public class Shader3D {
 		projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
 
 		eyePosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_eyePosition");
-		useLightLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_useLight");
+		//useLightLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_useLight");
+		globalAmbient 			= Gdx.gl.glGetUniformLocation(renderingProgramID, "globalAmbient");
 
 		//colorLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
 		lightPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
-		lightDiffLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightDiffuse");
+		lightColLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColor");
 		matDiffLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
 		matShinLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");
 
@@ -86,16 +88,20 @@ public class Shader3D {
 		Gdx.gl.glUniform4f(eyePosLoc, p.x, p.y, p.z, 1.0f);
 	}
 
-	public void setLightsUsed(boolean diff, boolean spec, boolean amb) {
+	/*public void setLightsUsed(boolean diff, boolean spec, boolean amb) {
 		float diffF = diff ? 1 : 0;
 		float specF = spec ? 1 : 0;
 		float ambF = amb ? 1 : 0;
 		System.out.println(diffF + " " +  specF + " " + ambF);
 		Gdx.gl.glUniform3f(useLightLoc, diffF, specF, ambF);
+	}*/
+
+	public void setGlobalAmbient(Color c) {
+		Gdx.gl.glUniform4f(globalAmbient, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
-	public void setLightDiffuse(Color c) {
-		Gdx.gl.glUniform4f(lightDiffLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	public void setLightColor(Color c) {
+		Gdx.gl.glUniform4f(lightColLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
 	public void setMaterialDiffuse(Color c) {

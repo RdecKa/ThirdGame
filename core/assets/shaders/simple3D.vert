@@ -13,11 +13,14 @@ uniform mat4 u_projectionMatrix;
 uniform vec4 u_eyePosition;
 
 uniform vec4 u_lightPosition; // In global coordinates
-uniform vec3 u_useLight; // (diffuse, specular, ambient)
+//uniform vec3 u_useLight; // (diffuse, specular, ambient)
 
-uniform vec4 u_lightDiffuse;
+uniform vec4 globalAmbient;
+
+uniform vec4 u_lightColor;
 
 uniform vec4 u_materialDiffuse;
+uniform vec4 u_materialSpecular;
 uniform float u_materialShininess;
 
 varying vec4 v_color;
@@ -43,16 +46,11 @@ void main()
 	float lambert = dot(normal, s) / (length(normal) * length(s));
 	float phong = dot(normal, h) / (length(normal) * length(h));
 
-	vec4 color1 = vec4(0, 0, 0, 0);
+	vec4 diffuseColor = lambert * u_lightColor * u_materialDiffuse;
+    vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * vec4(1, 1, 1, 1);
+    vec4 light1 = diffuseColor + specularColor;
 
-    if (u_useLight[0] == 1.0) {
-	    color1 += lambert * u_lightDiffuse * u_materialDiffuse;
-    }
-    if (u_useLight[1] == 1.0) {
-        color1 += pow(phong, u_materialShininess) * u_lightDiffuse * vec4(1, 1, 1, 1);
-    }
-
-	v_color = color1;
+	v_color = globalAmbient * u_materialDiffuse + light1;
 
 	position = u_viewMatrix * position;
     //normal = u_viewMatrix * normal;

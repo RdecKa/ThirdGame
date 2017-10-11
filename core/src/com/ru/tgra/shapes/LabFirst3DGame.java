@@ -4,10 +4,6 @@ package com.ru.tgra.shapes;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 
-import java.nio.FloatBuffer;
-
-import com.badlogic.gdx.utils.BufferUtils;
-
 public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor {
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
@@ -93,6 +89,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		lightPos1 = new Point3D(1, 1, 1);
 		lightCol1 = new Color(1, 1, 1, 1);
+
+		shader.setGlobalAmbient(new Color(0.2f, 0.2f, 0.2f, 1));
 	}
 
 	private void input(float deltaTime)
@@ -172,7 +170,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void update(float deltaTime)
 	{
 		shader.setLightPosition(lightPos1);
-		shader.setLightDiffuse(lightCol1);
+		shader.setLightColor(lightCol1);
+		shader.setShininess(10);
 
 		if (win) {
 			initLevel(++level);
@@ -210,7 +209,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		shader.setViewMatrix(perspCamera.getViewMatrix());
 		shader.setProjectionMatrix(perspCamera.getProjectionMatrix());
 		shader.setEyePosition(perspCamera.getEye());
-		shader.setLightsUsed(true, true, true);
+		//shader.setLightsUsed(true, true, true);
 
 		maze.draw(true, shader);
 
@@ -240,7 +239,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		shader.setViewMatrix(ortCamera.getViewMatrix());
 		shader.setProjectionMatrix(ortCamera.getProjectionMatrix());
 		shader.setEyePosition(ortCamera.getEye());
-		shader.setLightsUsed(true, false, false);
+		//shader.setLightsUsed(true, false, false);
 
 		maze.draw(false, shader);
 		player.draw(shader);
