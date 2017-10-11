@@ -29,9 +29,6 @@ void main()
 	vec4 normal = vec4(a_normal.x, a_normal.y, a_normal.z, 0.0);
 	normal = u_modelMatrix * normal;
 
-	position = u_viewMatrix * position;
-	//normal = u_viewMatrix * normal;
-
 	//v_color = (dot(normal, vec4(0,0,1,0)) / length(normal)) * u_color;
 
 	// Global coordinates
@@ -46,6 +43,9 @@ void main()
 	float phong = dot(normal, h) / (length(normal) * length(h));
 
 	v_color = lambert * u_lightDiffuse * u_materialDiffuse + pow(phong, u_materialShininess) * u_lightDiffuse * vec4(1, 1, 1, 1);
+
+	position = u_viewMatrix * position;
+    //normal = u_viewMatrix * normal;
 
 	gl_Position = u_projectionMatrix * position;
 }
