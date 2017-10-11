@@ -45,6 +45,7 @@ public class Maze {
 		if (drawWalls) {
 			// Draw outer walls
 			shader.setMaterialDiffuse(this.wallColor);
+			shader.setShininess(1);
 
 			for (int i = 0; i < 4; i++) {
 				ModelMatrix.main.loadIdentityMatrix();
@@ -86,6 +87,7 @@ public class Maze {
 
 		// Draw goal
 		shader.setMaterialDiffuse(new Color(1, 1, 1, 1));
+		shader.setShininess(0);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));
 		ModelMatrix.main.addScale(0.4f, 0.4f, 0.4f);
@@ -193,6 +195,7 @@ class Cell {
 
 	public void draw(Shader3D shader) {
 		shader.setMaterialDiffuse(this.floorColor);
+		shader.setShininess(5);
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		BoxGraphic.drawSolidCube();
 	}

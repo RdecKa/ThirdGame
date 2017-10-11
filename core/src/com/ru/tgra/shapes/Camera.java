@@ -82,4 +82,8 @@ public abstract class Camera {
 
 		return new Vector3D[]{v1, v2};
 	}
+
+	public Point3D getEye() {
+		return eye;
+	}
 }

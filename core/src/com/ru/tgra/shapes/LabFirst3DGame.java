@@ -209,6 +209,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		perspCamera.setPerspectiveProjection(fovProjection, 1, 0.1f, 100);
 		shader.setViewMatrix(perspCamera.getViewMatrix());
 		shader.setProjectionMatrix(perspCamera.getProjectionMatrix());
+		shader.setEyePosition(perspCamera.getEye());
 
 		maze.draw(true, shader);
 
@@ -237,6 +238,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		ortCamera.setOrtographicProjection(-mazeWidth * 0.5f, mazeWidth * 0.5f, -mazeDepth * 0.5f, mazeDepth * 0.5f, 1, 10);
 		shader.setViewMatrix(ortCamera.getViewMatrix());
 		shader.setProjectionMatrix(ortCamera.getProjectionMatrix());
+		shader.setEyePosition(ortCamera.getEye());
 
 		maze.draw(false, shader);
 		player.draw(shader);
