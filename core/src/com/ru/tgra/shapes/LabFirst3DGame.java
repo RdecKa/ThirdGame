@@ -171,7 +171,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	{
 		shader.setLightPosition(lightPos1);
 		shader.setLightColor(lightCol1);
-		shader.setShininess(10);
+		shader.setShininess(5);
 
 		if (win) {
 			initLevel(++level);
