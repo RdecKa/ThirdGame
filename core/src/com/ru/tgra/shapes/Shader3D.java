@@ -17,7 +17,10 @@ public class Shader3D {
 	public static int viewMatrixLoc;
 	public static int projectionMatrixLoc;
 
-	public static int colorLoc;
+	//public static int colorLoc;
+	public static int lightPosLoc;
+	public static int lightDiffLoc;
+	public static int matDiffLoc;
 
 	public Shader3D() {
 		String vertexShaderString;
@@ -34,6 +37,10 @@ public class Shader3D {
 
 		Gdx.gl.glCompileShader(vertexShaderID);
 		Gdx.gl.glCompileShader(fragmentShaderID);
+
+		System.out.println("ERROR: " + Gdx.gl.glGetError());
+		System.out.println("INFOLOG vetrtex:\n" + Gdx.gl.glGetShaderInfoLog(vertexShaderID));
+		System.out.println("INFOLOG fragment:\n" + Gdx.gl.glGetShaderInfoLog(fragmentShaderID));
 
 		renderingProgramID = Gdx.gl.glCreateProgram();
 
@@ -52,13 +59,28 @@ public class Shader3D {
 		viewMatrixLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_viewMatrix");
 		projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
 
-		colorLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
+		//colorLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
+		lightPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
+		lightDiffLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightDiffuse");
+		matDiffLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
 
 		Gdx.gl.glUseProgram(renderingProgramID);
 	}
 
-	public void setColor(Color c) {
+	/*public void setColor(Color c) {
 		Gdx.gl.glUniform4f(colorLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	}*/
+
+	public void setLightPosition(Point3D p) {
+		Gdx.gl.glUniform4f(lightPosLoc, p.x, p.y, p.z, 1.0f);
+	}
+
+	public void setLightDiffuse(Color c) {
+		Gdx.gl.glUniform4f(lightDiffLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	}
+
+	public void setMaterialDiffuse(Color c) {
+		Gdx.gl.glUniform4f(matDiffLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
 	public int getVertexPointer() {

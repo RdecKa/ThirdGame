@@ -12,6 +12,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
 	Shader3D shader;
+	Point3D lightPos1;
+	Color lightCol1;
 
 	Maze maze;
 	int mazeWidth, mazeDepth;
@@ -88,6 +90,9 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		ortCamera.Look3D(mapCameraEye, mapCameraCenter, new Vector3D(0,0,1));
 
 		thirdPerson = ThirdPerson.createThirdPerson(mapCameraCenter.returnAddedVector(new Vector3D(-10, 10, 0)), mapCameraCenter);
+
+		lightPos1 = new Point3D(1, 1, 1);
+		lightCol1 = new Color(1, 1, 1, 1);
 	}
 
 	private void input(float deltaTime)
@@ -143,10 +148,32 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
 			initLevel(level);
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
+			lightPos1.x += deltaTime * 10;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
+			lightPos1.x -= deltaTime * 10;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
+			lightPos1.z -= deltaTime * 10;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6)) {
+			lightPos1.z += deltaTime * 10;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.PLUS)) {
+			lightPos1.y += deltaTime * 10;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
+			lightPos1.y -= deltaTime * 10;
+		}
+
 	}
 	
 	private void update(float deltaTime)
 	{
+		shader.setLightPosition(lightPos1);
+		shader.setLightDiffuse(lightCol1);
+
 		if (win) {
 			initLevel(++level);
 			win = false;
@@ -183,10 +210,19 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		shader.setViewMatrix(perspCamera.getViewMatrix());
 		shader.setProjectionMatrix(perspCamera.getProjectionMatrix());
 
-		maze.draw(true, shader, perspCamera);
+		maze.draw(true, shader);
+
+		//
+		ModelMatrix.main.loadIdentityMatrix();
+		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
+		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		shader.setMaterialDiffuse(lightCol1);
+		SphereGraphic.drawSolidSphere();
+		//
 
 		if (!firstPersonView)
-			player.draw(shader, perspCamera);
+			player.draw(shader);
 
 		// Draw a map
 		int screenWidth = Gdx.graphics.getWidth();
@@ -202,8 +238,16 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		shader.setViewMatrix(ortCamera.getViewMatrix());
 		shader.setProjectionMatrix(ortCamera.getProjectionMatrix());
 
-		maze.draw(false, shader, ortCamera);
-		player.draw(shader, ortCamera);
+		maze.draw(false, shader);
+		player.draw(shader);
+
+		//
+		ModelMatrix.main.loadIdentityMatrix();
+		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
+		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		shader.setMaterialDiffuse(lightCol1);
+		SphereGraphic.drawSolidSphere();
+		//
 	}
 
 	@Override

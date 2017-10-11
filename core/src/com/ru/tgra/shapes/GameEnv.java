@@ -8,8 +8,8 @@ public class GameEnv {
 	public static void init(Shader3D shader) {
 
 		//COLOR IS SET HERE
-		Color col = new Color(0.7f, 0.2f, 0, 1);
-		shader.setColor(col);
+		/*Color col = new Color(0.7f, 0.2f, 0, 1);
+		shader.setColor(col);*/
 
 		BoxGraphic.create(shader.getVertexPointer(), shader.getNormalPointer());
 		SphereGraphic.create(shader.getVertexPointer(), shader.getNormalPointer());
