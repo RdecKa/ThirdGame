@@ -29,6 +29,12 @@ public class Vector3D {
 		z += v2.z;
 	}
 
+	public Vector3D returnAdded(Vector3D vector) {
+		Vector3D v = this.clone();
+		v.add(vector);
+		return v;
+	}
+
 	public float dot(Vector3D v2)
 	{
 		return x*v2.x + y*v2.y + z*v2.z;
@@ -49,6 +55,12 @@ public class Vector3D {
 		x = x / len;
 		y = y / len;
 		z = z / len;
+	}
+
+	public Vector3D returnNormalized() {
+		Vector3D v = this.clone();
+		v.normalize();
+		return v;
 	}
 
 	public Vector3D cross(Vector3D v2)

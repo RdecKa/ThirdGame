@@ -33,16 +33,16 @@ void main()
 	//  Ligthing
 
 	v_normal = normal;
-
-	v_s = u_lightPosition - position; // Direction to the light
+    if (u_lightPosition[3] == 1.0) {
+    	v_s = u_lightPosition - position; // Direction to the light
+    } else {
+        v_s = vec4(u_lightPosition.x, u_lightPosition.y, u_lightPosition.z, 0);
+    }
     vec4 v = u_eyePosition - position; // Direction to the camera
 
 	v_h = v_s + v;
 
-
-
 	position = u_viewMatrix * position;
-    //normal = u_viewMatrix * normal;
 
 	gl_Position = u_projectionMatrix * position;
 }

@@ -169,7 +169,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-		shader.setLightPosition(lightPos1);
+		//shader.setLightPosition(lightPos1);
+		shader.setLightDirection(player.direction.returnAdded(lookDown).returnScaled(0.6f));
 		shader.setLightColor(lightCol1);
 		shader.setShininess(5);
 

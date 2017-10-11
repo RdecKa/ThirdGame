@@ -83,8 +83,9 @@ public class Shader3D {
 		Gdx.gl.glUniform4f(colorLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}*/
 
-	public void setLightPosition(Point3D p) {
-		Gdx.gl.glUniform4f(lightPosLoc, p.x, p.y, p.z, 1.0f);
+	public void setLightPosition(Point3D p) { Gdx.gl.glUniform4f(lightPosLoc, p.x, p.y, p.z, 1.0f); }
+	public void setLightDirection(Vector3D v)  {
+		Gdx.gl.glUniform4f(lightPosLoc, v.x, v.y, v.z, 0.0f);
 	}
 	public void setEyePosition(Point3D p) {
 		Gdx.gl.glUniform4f(eyePosLoc, p.x, p.y, p.z, 1.0f);
