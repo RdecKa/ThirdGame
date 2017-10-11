@@ -21,8 +21,7 @@ void main()
 	float phong = dot(v_normal, v_h) / (length(v_normal) * length(v_h));
 
 	vec4 diffuseColor = lambert * u_lightColor * u_materialDiffuse;
-    vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * vec4(0.3, 0.3, 0.3, 1);
-    //vec4 specularColor = vec4(0, 0, 0, 0);
+    vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * u_materialSpecular;
     vec4 light1 = diffuseColor + specularColor;
 
 	gl_FragColor = globalAmbient * u_materialDiffuse + light1;

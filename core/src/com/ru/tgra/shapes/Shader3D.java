@@ -25,6 +25,7 @@ public class Shader3D {
 	public static int lightPosLoc;
 	public static int lightColLoc;
 	public static int matDiffLoc;
+	public static int matSpecLoc;
 	public static int matShinLoc;
 
 	public Shader3D() {
@@ -72,6 +73,7 @@ public class Shader3D {
 		lightPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
 		lightColLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColor");
 		matDiffLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
+		matSpecLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialSpecular");
 		matShinLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");
 
 		Gdx.gl.glUseProgram(renderingProgramID);
@@ -106,6 +108,10 @@ public class Shader3D {
 
 	public void setMaterialDiffuse(Color c) {
 		Gdx.gl.glUniform4f(matDiffLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	}
+
+	public void setMaterialSpecular(Color c) {
+		Gdx.gl.glUniform4f(matSpecLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
 	public void setShininess(float shine) {

@@ -33,6 +33,7 @@ public class Maze {
 	public void draw(boolean drawWalls, Shader3D shader) {
 		// Draw cells
 		//shader.setShininess(100);
+		shader.setMaterialSpecular(new Color(0.3f, 0.3f, 0.3f, 1));
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
 			ModelMatrix.main.addTranslation(0.5f * this.unit, 0, (z + 0.5f) * this.unit);

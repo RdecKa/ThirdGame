@@ -15,7 +15,8 @@ public class Player {
 
 	public void draw(Shader3D shader) {
 		shader.setMaterialDiffuse(this.color);
-		shader.setShininess(10);
+		shader.setMaterialSpecular(new Color(1, 1, 1, 1));
+		shader.setShininess(20);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(position.x, position.y - 2 * this.radius, position.z);
 		ModelMatrix.main.addScale(this.radius, this.radius, this.radius);
