@@ -35,9 +35,15 @@ public class Maze {
 		this.goalColor = new Color(1, 0, 0, 1);
 		this.obstacles = new Vector<Obstacle>();
 		for (int i = 0; i < this.mazeWidth; i++) {
-			obstacles.add(new Obstacle(rand.nextInt(this.mazeWidth),
-					rand.nextInt(this.mazeDepth),
-					rand.nextFloat() / 3.0f,
+			int x = rand.nextInt(this.mazeWidth);
+			int y = rand.nextInt(this.mazeDepth);
+			if (x == 0 && y == 0) {
+				x = 1;
+			} else if (x == mazeWidth - 1 && y == mazeDepth - 1) {
+				y = 1;
+			}
+			Point3D newPosition = new Point3D( x + 0.5f, 0.8f, y + 0.5f);
+			obstacles.add(new Obstacle(newPosition, rand.nextFloat() / 10.0f + 0.2f,
 					new Color(0.5f, 0.8f, 0.7f, 1)));
 		}
 	}
@@ -173,6 +179,10 @@ public class Maze {
 		for (Obstacle obst : this.obstacles) {
 			obst.changeSize(deltaTime);
 		}
+	}
+
+	public Vector<Obstacle> getObstacles() {
+		return this.obstacles;
 	}
 
 	public void incrementAngle(float angle) {

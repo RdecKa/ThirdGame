@@ -1,5 +1,7 @@
 package com.ru.tgra.shapes;
 
+import java.util.Vector;
+
 public class Player {
 	public Point3D position;
 	public Vector3D direction;
@@ -34,6 +36,20 @@ public class Player {
 		}
 
 		float wallWidth = maze.getWallWidth() / 2;
+
+		// Check hitting balls
+		Vector<Obstacle> obstacles = maze.getObstacles();
+		Point3D wantToGo = this.position.returnAddedVector(moveFor);
+		for (Obstacle obst : obstacles) {
+			//System.out.println(obst.getPosition().getDistanceTo(this.position) + " " + obst.getRadius() + " " + this.radius);
+			float diff = obst.getPosition().getDistanceTo(wantToGo) - obst.getRadius() - this.radius;
+			if (diff < 0) {
+				Vector3D ballWant = Vector3D.difference(wantToGo, obst.getPosition());
+				Vector3D changeDirection = ballWant.returnNormalized().returnScaled(-diff);
+				moveFor.add(changeDirection);
+
+			}
+		}
 
 		// Check hitting walls directly
 		if (moveFor.x >= 0 && this.position.x + this.radius > (currentX + 1 - wallWidth) && maze.hasEastWall(currentX, currentZ)) {

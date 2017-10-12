@@ -41,6 +41,10 @@ public class Point3D {
 		return (float) Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.z - this.z, 2));
 	}
 
+	public float getDistanceTo(Point3D p) {
+		return (float) Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2) + Math.pow(p.z - this.z, 2));
+	}
+
 	public Point3D clone() { return new Point3D(x, y, z); }
 
 	@Override
