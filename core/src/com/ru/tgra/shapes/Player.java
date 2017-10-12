@@ -24,6 +24,17 @@ public class Player {
 		ModelMatrix.main.addScale(this.radius, this.radius, this.radius);
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		SphereGraphic.drawSolidSphere();
+
+		// Draw head
+		shader.setMaterialDiffuse(new Color(0.3f, 0.9f, 0.3f, 1));
+		Point3D headPos = this.position.clone();
+		headPos.add(this.direction.returnScaled(0.15f));
+		headPos.y -= this.radius * 1.2f;
+		ModelMatrix.main.loadIdentityMatrix();
+		ModelMatrix.main.addTranslation(headPos.x, headPos.y, headPos.z);
+		ModelMatrix.main.addScale(this.radius / 3f, this.radius / 3f, this.radius / 3f);
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		SphereGraphic.drawSolidSphere();
 	}
 
 	public boolean move(Vector3D moveForOrig, Maze maze) {
