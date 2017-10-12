@@ -72,8 +72,8 @@ public class Shader3D {
 
 		lightPosDirLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPositionDir");
 		lightPosPosLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPositionPos");
-		lightColDirLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorPos");
-		lightColPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorDir");
+		lightColDirLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorDir");
+		lightColPosLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorPos");
 		matDiffLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
 		matSpecLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialSpecular");
 		matShinLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");

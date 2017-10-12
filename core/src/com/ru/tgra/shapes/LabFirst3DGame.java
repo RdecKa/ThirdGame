@@ -38,8 +38,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void initLevel(int level) {
 		switch (level) {
 			case 1: {
-				mazeWidth = 3;
-				mazeDepth = 4;
+				mazeWidth = 8;
+				mazeDepth = 6;
 				numWallsAtOnce = 1;
 				break;
 			}
@@ -179,15 +179,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 			initLevel(++level);
 		}
 
-		shader.setLightDirection(player.direction);
+		shader.setLightDirection(player.direction.returnScaled(-1));
 		/*System.out.println("P. pos: " + player.position);
 		System.out.println("P. dir: " + player.direction);
 		System.out.println("Vec: " + new Vector3D(0, 1, 0));
 		System.out.println("Result: " + player.direction.cross(new Vector3D(0, 1, 0)));*/
-		shader.setLightDirColor(lightCol1.returnScaled(1));
+		shader.setLightDirColor(new Color(0, 1, 0, 1));
 
 		shader.setLightPosition(lightPos1);
-		shader.setLightPosColor(lightCol1.returnScaled(0.8f));
+		shader.setLightPosColor(new Color(0, 0, 1, 1));
 
 
 		shader.setShininess(5);
