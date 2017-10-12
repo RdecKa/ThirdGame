@@ -14,6 +14,7 @@ public class Maze {
 	private float goalBoxAngle;
 	private float goalBoxSize;
 	private Color goalColor;
+	private Vector<Obstacle> obstacles;
 
 	public Maze(int mazeWidth, int mazeDepth) {
 		this.mazeWidth = mazeWidth;
@@ -32,6 +33,13 @@ public class Maze {
 		this.goalBoxAngle = 0;
 		this.goalBoxSize = 0.4f;
 		this.goalColor = new Color(1, 0, 0, 1);
+		this.obstacles = new Vector<Obstacle>();
+		for (int i = 0; i < this.mazeWidth; i++) {
+			obstacles.add(new Obstacle(rand.nextInt(this.mazeWidth),
+					rand.nextInt(this.mazeDepth),
+					rand.nextFloat() / 3.0f,
+					new Color(0.5f, 0.8f, 0.7f, 1)));
+		}
 	}
 
 	public void draw(boolean drawWalls, Shader3D shader) {
@@ -104,6 +112,11 @@ public class Maze {
 		ModelMatrix.main.addRotationY(this.goalBoxAngle);
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		BoxGraphic.drawSolidCube();
+
+		// Draw obstacles
+		for (Obstacle obst: this.obstacles) {
+			obst.draw(shader);
+		}
 	}
 
 	private void addRandomWall(int curX, int curZ) {
@@ -153,6 +166,12 @@ public class Maze {
 		}
 		for (Wall wall : newFullyRaised) {
 			this.innerWallsToBe.remove(wall);
+		}
+	}
+
+	public void changeObstacles(float deltaTime) {
+		for (Obstacle obst : this.obstacles) {
+			obst.changeSize(deltaTime);
 		}
 	}
 
