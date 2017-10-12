@@ -5,24 +5,36 @@ precision mediump float;
 
 uniform vec4 globalAmbient;
 
-uniform vec4 u_lightColor;
+uniform vec4 u_lightColorPos;
+uniform vec4 u_lightColorDir;
 
 uniform vec4 u_materialDiffuse;
 uniform vec4 u_materialSpecular;
 uniform float u_materialShininess;
 
 varying vec4 v_normal;
-varying vec4 v_s;
-varying vec4 v_h;
+varying vec4 v_sDir;
+varying vec4 v_hDir;
+varying vec4 v_sPos;
+varying vec4 v_hPos;
 
 void main()
 {
-    float lambert = dot(v_normal, v_s) / (length(v_normal) * length(v_s));
-	float phong = dot(v_normal, v_h) / (length(v_normal) * length(v_h));
+    // Directional light
+    float lambert = dot(v_normal, v_sDir) / (length(v_normal) * length(v_sDir));
+    float phong = dot(v_normal, v_hDir) / (length(v_normal) * length(v_hDir));
 
-	vec4 diffuseColor = lambert * u_lightColor * u_materialDiffuse;
-    vec4 specularColor = pow(phong, u_materialShininess) * u_lightColor * u_materialSpecular;
-    vec4 light1 = diffuseColor + specularColor;
+	vec4 diffuseColorDir = lambert * u_lightColorDir * u_materialDiffuse;
+    vec4 specularColorDir = pow(phong, u_materialShininess) * u_lightColorDir * u_materialSpecular;
+    vec4 lightDir = diffuseColorDir + specularColorDir;
 
-	gl_FragColor = globalAmbient * u_materialDiffuse + light1;
+    // Positional light
+    lambert = dot(v_normal, v_sPos) / (length(v_normal) * length(v_sPos));
+    phong = dot(v_normal, v_hPos) / (length(v_normal) * length(v_hPos));
+
+	vec4 diffuseColorPos = lambert * u_lightColorPos * u_materialDiffuse;
+    vec4 specularColorPos = pow(phong, u_materialShininess) * u_lightColorPos * u_materialSpecular;
+    vec4 lightPos = diffuseColorPos + specularColorPos;
+
+	gl_FragColor = globalAmbient * u_materialDiffuse + lightDir + lightPos;
 }

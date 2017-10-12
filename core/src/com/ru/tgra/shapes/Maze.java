@@ -32,7 +32,7 @@ public class Maze {
 
 	public void draw(boolean drawWalls, Shader3D shader) {
 		// Draw cells
-		//shader.setShininess(100);
+		shader.setShininess(0);
 		shader.setMaterialSpecular(new Color(0.3f, 0.3f, 0.3f, 1));
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
@@ -47,7 +47,7 @@ public class Maze {
 		if (drawWalls) {
 			// Draw outer walls
 			shader.setMaterialDiffuse(this.wallColor);
-			//shader.setShininess(1);
+			shader.setShininess(0);
 
 			for (int i = 0; i < 4; i++) {
 				ModelMatrix.main.loadIdentityMatrix();

@@ -22,8 +22,10 @@ public class Shader3D {
 	public static int globalAmbient;
 
 	//public static int colorLoc;
-	public static int lightPosLoc;
-	public static int lightColLoc;
+	public static int lightPosDirLoc;
+	public static int lightPosPosLoc;
+	public static int lightColDirLoc;
+	public static int lightColPosLoc;
 	public static int matDiffLoc;
 	public static int matSpecLoc;
 	public static int matShinLoc;
@@ -66,12 +68,12 @@ public class Shader3D {
 		projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
 
 		eyePosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_eyePosition");
-		//useLightLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_useLight");
 		globalAmbient 			= Gdx.gl.glGetUniformLocation(renderingProgramID, "globalAmbient");
 
-		//colorLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
-		lightPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
-		lightColLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColor");
+		lightPosDirLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPositionDir");
+		lightPosPosLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPositionPos");
+		lightColDirLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorPos");
+		lightColPosLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightColorDir");
 		matDiffLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
 		matSpecLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialSpecular");
 		matShinLoc				= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");
@@ -79,32 +81,24 @@ public class Shader3D {
 		Gdx.gl.glUseProgram(renderingProgramID);
 	}
 
-	/*public void setColor(Color c) {
-		Gdx.gl.glUniform4f(colorLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-	}*/
 
-	public void setLightPosition(Point3D p) { Gdx.gl.glUniform4f(lightPosLoc, p.x, p.y, p.z, 1.0f); }
+	public void setLightPosition(Point3D p) { Gdx.gl.glUniform4f(lightPosPosLoc, p.x, p.y, p.z, 1.0f); }
 	public void setLightDirection(Vector3D v)  {
-		Gdx.gl.glUniform4f(lightPosLoc, v.x, v.y, v.z, 0.0f);
+		Gdx.gl.glUniform4f(lightPosDirLoc, v.x, v.y, v.z, 0.0f);
 	}
 	public void setEyePosition(Point3D p) {
 		Gdx.gl.glUniform4f(eyePosLoc, p.x, p.y, p.z, 1.0f);
 	}
 
-	/*public void setLightsUsed(boolean diff, boolean spec, boolean amb) {
-		float diffF = diff ? 1 : 0;
-		float specF = spec ? 1 : 0;
-		float ambF = amb ? 1 : 0;
-		System.out.println(diffF + " " +  specF + " " + ambF);
-		Gdx.gl.glUniform3f(useLightLoc, diffF, specF, ambF);
-	}*/
-
 	public void setGlobalAmbient(Color c) {
 		Gdx.gl.glUniform4f(globalAmbient, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
-	public void setLightColor(Color c) {
-		Gdx.gl.glUniform4f(lightColLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	public void setLightDirColor(Color c) {
+		Gdx.gl.glUniform4f(lightColDirLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+	}
+	public void setLightPosColor(Color c) {
+		Gdx.gl.glUniform4f(lightColPosLoc, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
 	public void setMaterialDiffuse(Color c) {

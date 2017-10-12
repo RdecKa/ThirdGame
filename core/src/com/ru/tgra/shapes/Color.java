@@ -20,8 +20,21 @@ public class Color {
 		this.alpha = rand.nextFloat();
 	}
 
+	public Color returnScaled(float s) {
+		Color c = this.clone();
+		c.red = c.red * s;
+		c.green = c.green * s;
+		c.blue = c.blue * s;
+		c.alpha = c.alpha * s;
+		return c;
+	}
+
 	public float getRed() { return red; }
 	public float getGreen() { return green; }
 	public float getBlue() { return blue; }
 	public float getAlpha() { return alpha; }
+
+	public Color clone() {
+		return new Color(red, green, blue, alpha);
+	}
 }

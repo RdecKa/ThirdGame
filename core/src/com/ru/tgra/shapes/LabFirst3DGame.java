@@ -87,10 +87,10 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		thirdPerson = ThirdPerson.createThirdPerson(mapCameraCenter.returnAddedVector(new Vector3D(-10, 10, 0)), mapCameraCenter);
 
-		lightPos1 = new Point3D(mazeWidth - 1, 2, mazeDepth - 1);
+		lightPos1 = new Point3D(mazeWidth - 1, 0.5f, mazeDepth - 1);
 		lightCol1 = new Color(1, 1, 1, 1);
 
-		shader.setGlobalAmbient(new Color(0.2f, 0.2f, 0.2f, 1));
+		shader.setGlobalAmbient(new Color(0.1f, 0.1f, 0.1f, 1));
 	}
 
 	private void input(float deltaTime)
@@ -169,9 +169,13 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-		//shader.setLightPosition(lightPos1);
-		shader.setLightDirection(player.direction.returnAdded(lookDown).returnScaled(0.6f));
-		shader.setLightColor(lightCol1);
+		shader.setLightDirection(player.direction.returnScaled(0.1f).cross(new Vector3D(0, 1, 0)));
+		shader.setLightDirColor(lightCol1.returnScaled(0.5f));
+
+		shader.setLightPosition(lightPos1);
+		shader.setLightPosColor(lightCol1.returnScaled(0.5f));
+
+
 		shader.setShininess(5);
 
 		if (win) {
