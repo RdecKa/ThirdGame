@@ -31,7 +31,7 @@ public class Obstacle {
 			else
 				this.radius += deltaTime;
 		else
-			if (this.radius < 0.2f)
+			if (this.radius < 0.1f)
 				this.growing = true;
 			else
 				this.radius -= deltaTime;

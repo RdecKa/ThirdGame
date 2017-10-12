@@ -43,7 +43,7 @@ public class Maze {
 				y = 1;
 			}
 			Point3D newPosition = new Point3D( x + 0.5f, 0.8f, y + 0.5f);
-			obstacles.add(new Obstacle(newPosition, rand.nextFloat() / 10.0f + 0.2f,
+			obstacles.add(new Obstacle(newPosition, rand.nextFloat() / 4f + 0.1f,
 					new Color(0.5f, 0.8f, 0.7f, 1)));
 		}
 	}
