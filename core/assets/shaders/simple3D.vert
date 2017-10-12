@@ -33,6 +33,7 @@ void main()
 	//  Ligthing
 
 	v_normal = normal;
+	vec4 v = u_eyePosition - position; // Direction to the camera
 
 
 	// Directional light
@@ -41,7 +42,6 @@ void main()
     } else {
         v_sDir = vec4(u_lightPositionDir.x, u_lightPositionDir.y, u_lightPositionDir.z, 0);
     }
-    vec4 v = u_eyePosition - position; // Direction to the camera
 	v_hDir = v_sDir + v;
 
     // Positional light
@@ -50,7 +50,6 @@ void main()
     } else {
         v_sPos = vec4(u_lightPositionPos.x, u_lightPositionPos.y, u_lightPositionPos.z, 0);
     }
-    v = u_eyePosition - position; // Direction to the camera
 	v_hPos = v_sPos + v;
 
 

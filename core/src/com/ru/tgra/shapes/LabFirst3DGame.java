@@ -38,14 +38,14 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void initLevel(int level) {
 		switch (level) {
 			case 1: {
-				mazeWidth = 3;
-				mazeDepth = 4;
+				mazeWidth = 6;
+				mazeDepth = 8;
 				numWallsAtOnce = 1;
 				break;
 			}
 			case 2: {
-				mazeWidth = 6;
-				mazeDepth = 5;
+				mazeWidth = 7;
+				mazeDepth = 9;
 				numWallsAtOnce = 2;
 				break;
 			}
@@ -87,10 +87,11 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		thirdPerson = ThirdPerson.createThirdPerson(mapCameraCenter.returnAddedVector(new Vector3D(-10, 10, 0)), mapCameraCenter);
 
-		lightPos1 = new Point3D(mazeWidth - 1, 0.5f, mazeDepth - 1);
+		lightPos1 = new Point3D(mazeWidth - 0.5f, 1, mazeDepth - 0.5f);
 		lightCol1 = new Color(1, 1, 1, 1);
 
-		shader.setGlobalAmbient(new Color(0.1f, 0.1f, 0.1f, 1));
+		shader.setGlobalAmbient(new Color(0.2f, 0.2f, 0.2f, 1));
+		//shader.setGlobalAmbient(new Color(0, 0, 0, 1));
 	}
 
 	private void input(float deltaTime)
@@ -169,11 +170,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
-		shader.setLightDirection(player.direction.returnScaled(0.1f).cross(new Vector3D(0, 1, 0)));
-		shader.setLightDirColor(lightCol1.returnScaled(0.5f));
+		shader.setLightDirection(player.direction);
+		/*System.out.println("P. pos: " + player.position);
+		System.out.println("P. dir: " + player.direction);
+		System.out.println("Vec: " + new Vector3D(0, 1, 0));
+		System.out.println("Result: " + player.direction.cross(new Vector3D(0, 1, 0)));*/
+		shader.setLightDirColor(lightCol1.returnScaled(1));
 
 		shader.setLightPosition(lightPos1);
-		shader.setLightPosColor(lightCol1.returnScaled(0.5f));
+		shader.setLightPosColor(lightCol1.returnScaled(0.8f));
 
 
 		shader.setShininess(5);
