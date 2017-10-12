@@ -90,9 +90,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		lightPos1 = new Point3D(mazeWidth - 0.5f, 1, mazeDepth - 0.5f);
 		lightCol1 = new Color(1, 1, 1, 1);
-
-		shader.setGlobalAmbient(new Color(0.2f, 0.2f, 0.2f, 1));
-		//shader.setGlobalAmbient(new Color(0, 0, 0, 1));
 	}
 
 	private void input(float deltaTime)
@@ -179,17 +176,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 			initLevel(++level);
 		}
 
-		shader.setLightDirection(player.direction.returnScaled(-1));
-		/*System.out.println("P. pos: " + player.position);
-		System.out.println("P. dir: " + player.direction);
-		System.out.println("Vec: " + new Vector3D(0, 1, 0));
-		System.out.println("Result: " + player.direction.cross(new Vector3D(0, 1, 0)));*/
-		shader.setLightDirColor(new Color(0.2f, 0.2f, 0.2f, 1));
-
-		shader.setLightPosition(lightPos1);
-		shader.setLightPosColor(new Color(1, 0, 0, 1));
-
-
 		shader.setShininess(5);
 
 
@@ -215,16 +201,24 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 			return;
 		}
 
-		//do all actual drawing and rendering here
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+		// Set lights and cameras
+		shader.setLightDirection(player.direction.returnScaled(-1));
+		shader.setLightDirColor(new Color(0.4f, 0.4f, 0.4f, 1));
+
+		shader.setLightPosition(lightPos1);
+		shader.setLightPosColor(new Color(1, 0.3f, 0.3f, 1));
+
 		perspCamera.setPerspectiveProjection(fovProjection, 1, 0.1f, 100);
 		shader.setViewMatrix(perspCamera.getViewMatrix());
 		shader.setProjectionMatrix(perspCamera.getProjectionMatrix());
 		shader.setEyePosition(perspCamera.getEye());
+
+		shader.setGlobalAmbient(new Color(0.5f, 0.5f, 0.5f, 1));
 
 		maze.draw(true, shader);
 
@@ -250,10 +244,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
 
+		shader.setLightDirColor(new Color(0, 0, 0, 1));
+		shader.setLightPosColor(new Color(0, 0, 0, 1));
+
 		ortCamera.setOrtographicProjection(-mazeWidth * 0.5f, mazeWidth * 0.5f, -mazeDepth * 0.5f, mazeDepth * 0.5f, 1, 10);
 		shader.setViewMatrix(ortCamera.getViewMatrix());
 		shader.setProjectionMatrix(ortCamera.getProjectionMatrix());
 		shader.setEyePosition(ortCamera.getEye());
+
+		shader.setGlobalAmbient(new Color(1, 1, 1, 1));
 
 		maze.draw(false, shader);
 		player.draw(shader);
