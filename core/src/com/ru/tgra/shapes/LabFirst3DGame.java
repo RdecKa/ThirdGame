@@ -4,6 +4,8 @@ package com.ru.tgra.shapes;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 
+import java.util.Random;
+
 public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor {
 	OrtographicCamera ortCamera;
 	PerspectiveCamera perspCamera;
@@ -25,11 +27,15 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	boolean win, winAnimation;
 	public static int level, numWallsAtOnce;
 
+	Random rand;
+
 	@Override
 	public void create () {
 		shader = new Shader3D();
 		Gdx.input.setInputProcessor(this);
 		GameEnv.init(shader);
+
+		rand = new Random();
 
 		level = 1;
 		initLevel(level);
@@ -38,8 +44,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void initLevel(int level) {
 		switch (level) {
 			case 1: {
-				mazeWidth = 8;
-				mazeDepth = 6;
+				mazeWidth = 5;
+				mazeDepth = 4;
 				numWallsAtOnce = 1;
 				break;
 			}
@@ -56,9 +62,9 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 				break;
 			}
 			default: {
-				mazeWidth = 12;
-				mazeDepth = 14;
-				numWallsAtOnce = 4;
+				mazeWidth = 10 + rand.nextInt(5);
+				mazeDepth = 10 + rand.nextInt(5);
+				numWallsAtOnce = 3 + rand.nextInt(3);
 			}
 		}
 
