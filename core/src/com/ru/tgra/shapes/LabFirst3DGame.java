@@ -151,25 +151,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
 			initLevel(level);
 		}
-		/*if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
-			lightPos1.x += deltaTime * 10;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
-			lightPos1.x -= deltaTime * 10;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
-			lightPos1.z -= deltaTime * 10;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6)) {
-			lightPos1.z += deltaTime * 10;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.PLUS)) {
-			lightPos1.y += deltaTime * 10;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-			lightPos1.y -= deltaTime * 10;
-		}*/
-
 	}
 	
 	private void update(float deltaTime)
@@ -183,7 +164,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		}
 
 		shader.setShininess(5);
-
 
 		if (firstPersonView) {
 			win = player.move(moveFor, maze);
@@ -230,15 +210,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		maze.draw(true, shader);
 
-		//
-		/*ModelMatrix.main.loadIdentityMatrix();
-		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
-		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);
-		shader.setModelMatrix(ModelMatrix.main.getMatrix());
-		shader.setMaterialDiffuse(lightCol1);
-		SphereGraphic.drawSolidSphere();*/
-		//
-
 		if (!firstPersonView)
 			player.draw(shader);
 
@@ -264,14 +235,6 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		maze.draw(false, shader);
 		player.draw(shader);
-
-		//
-		/*ModelMatrix.main.loadIdentityMatrix();
-		ModelMatrix.main.addTranslation(lightPos1.x, lightPos1.y, lightPos1.z);
-		ModelMatrix.main.addScale(0.1f, 0.1f, 0.1f);		shader.setModelMatrix(ModelMatrix.main.getMatrix());
-		shader.setMaterialDiffuse(lightCol1);
-		SphereGraphic.drawSolidSphere();*/
-		//
 	}
 
 	@Override

@@ -46,10 +46,6 @@ public class Shader3D {
 		Gdx.gl.glCompileShader(vertexShaderID);
 		Gdx.gl.glCompileShader(fragmentShaderID);
 
-		System.out.println("ERROR: " + Gdx.gl.glGetError());
-		System.out.println("INFOLOG vetrtex:\n" + Gdx.gl.glGetShaderInfoLog(vertexShaderID));
-		System.out.println("INFOLOG fragment:\n" + Gdx.gl.glGetShaderInfoLog(fragmentShaderID));
-
 		renderingProgramID = Gdx.gl.glCreateProgram();
 
 		Gdx.gl.glAttachShader(renderingProgramID, vertexShaderID);

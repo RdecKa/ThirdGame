@@ -52,8 +52,6 @@ public class Maze {
 		// Draw cells
 		//shader.setShininess(10);
 		shader.setMaterialSpecular(new Color(0, 0, 0, 1));
-		//shader.setMaterialSpecular(new Color(1, 1, 1, 1));
-		//shader.setMaterialSpecular(new Color(0.1f, 0.1f, 0.1f, 1));
 		for (int z = 0; z < mazeDepth; z++) {
 			ModelMatrix.main.loadIdentityMatrix();
 			ModelMatrix.main.addTranslation(0.5f * this.unit, 0, (z + 0.5f) * this.unit);
@@ -67,7 +65,6 @@ public class Maze {
 		if (drawWalls) {
 			// Draw outer walls
 			shader.setMaterialDiffuse(this.wallColor);
-			//shader.setShininess(0);
 
 			for (int i = 0; i < 4; i++) {
 				ModelMatrix.main.loadIdentityMatrix();
@@ -109,7 +106,6 @@ public class Maze {
 
 		// Draw goal
 		shader.setMaterialDiffuse(this.goalColor);
-		//shader.setShininess(5);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));
 		ModelMatrix.main.addScale(this.goalBoxSize, this.goalBoxSize, this.goalBoxSize);
