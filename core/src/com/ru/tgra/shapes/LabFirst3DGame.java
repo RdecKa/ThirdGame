@@ -22,7 +22,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 	Player player, thirdPerson;
 
-	boolean win;
+	boolean win, winAnimation;
 	public static int level, numWallsAtOnce;
 
 	@Override
@@ -38,8 +38,8 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	private void initLevel(int level) {
 		switch (level) {
 			case 1: {
-				mazeWidth = 6;
-				mazeDepth = 8;
+				mazeWidth = 3;
+				mazeDepth = 4;
 				numWallsAtOnce = 1;
 				break;
 			}
@@ -67,6 +67,7 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		player = new Player(new Point3D(0.5f, 0.8f, 0.5f), new Vector3D(1, 0, 1));
 
 		win = false;
+		winAnimation = false;
 
 		lookDown = new Vector3D(0, -0.5f, 0);
 		moveLeft = new Vector3D(1, 0, 0);
@@ -170,6 +171,14 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void update(float deltaTime)
 	{
+		if (win && winAnimation) {
+			winAnimation = maze.decreaseGoalSize(deltaTime);
+			maze.incrementAngle(deltaTime * 50);
+			return;
+		} else if (win) {
+			initLevel(++level);
+		}
+
 		shader.setLightDirection(player.direction);
 		/*System.out.println("P. pos: " + player.position);
 		System.out.println("P. dir: " + player.direction);
@@ -183,13 +192,10 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 
 		shader.setShininess(5);
 
-		if (win) {
-			initLevel(++level);
-			win = false;
-		}
 
 		if (firstPersonView) {
 			win = player.move(moveFor, maze);
+			winAnimation = win;
 			fovProjection = 60;
 			Point3D center = player.position.returnAddedVector(player.direction).returnAddedVector(lookDown);
 			moveForward = player.direction;
@@ -205,13 +211,13 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 	
 	private void display()
 	{
+		if (win && !winAnimation) {
+			return;
+		}
+
 		//do all actual drawing and rendering here
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-		if (win) {
-			return;
-		}
 
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

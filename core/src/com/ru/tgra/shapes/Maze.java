@@ -12,6 +12,7 @@ public class Maze {
 	private static Random rand = new Random();
 	private float wallWidth;
 	private float goalBoxAngle;
+	private float goalBoxSize;
 
 	public Maze(int mazeWidth, int mazeDepth) {
 		this.mazeWidth = mazeWidth;
@@ -28,6 +29,7 @@ public class Maze {
 		this.innerWallsToBe = new Vector<Wall>();
 		this.wallWidth = 0.1f;
 		this.goalBoxAngle = 0;
+		this.goalBoxSize = 0.4f;
 	}
 
 	public void draw(boolean drawWalls, Shader3D shader) {
@@ -94,7 +96,7 @@ public class Maze {
 		//shader.setShininess(5);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));
-		ModelMatrix.main.addScale(0.4f, 0.4f, 0.4f);
+		ModelMatrix.main.addScale(this.goalBoxSize, this.goalBoxSize, this.goalBoxSize);
 		ModelMatrix.main.addRotationZ(this.goalBoxAngle);
 		ModelMatrix.main.addRotationX(this.goalBoxAngle);
 		ModelMatrix.main.addRotationY(this.goalBoxAngle);
@@ -155,6 +157,14 @@ public class Maze {
 	public void incrementAngle(float angle) {
 		this.goalBoxAngle += angle;
 		this.goalBoxAngle %= 360;
+	}
+
+	// Returns false when box has disappeared
+	public boolean decreaseGoalSize(float sub) {
+		this.goalBoxSize -= sub;
+		if (this.goalBoxSize <= 0)
+			return false;
+		return true;
 	}
 
 	public boolean hasNorthWall(int x, int z) {
