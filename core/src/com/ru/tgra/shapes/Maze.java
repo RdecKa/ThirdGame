@@ -13,6 +13,7 @@ public class Maze {
 	private float wallWidth;
 	private float goalBoxAngle;
 	private float goalBoxSize;
+	private Color goalColor;
 
 	public Maze(int mazeWidth, int mazeDepth) {
 		this.mazeWidth = mazeWidth;
@@ -30,11 +31,12 @@ public class Maze {
 		this.wallWidth = 0.1f;
 		this.goalBoxAngle = 0;
 		this.goalBoxSize = 0.4f;
+		this.goalColor = new Color(1, 0, 0, 1);
 	}
 
 	public void draw(boolean drawWalls, Shader3D shader) {
 		// Draw cells
-		//shader.setShininess(0);
+		//shader.setShininess(10);
 		shader.setMaterialSpecular(new Color(0, 0, 0, 1));
 		//shader.setMaterialSpecular(new Color(1, 1, 1, 1));
 		//shader.setMaterialSpecular(new Color(0.1f, 0.1f, 0.1f, 1));
@@ -92,7 +94,7 @@ public class Maze {
 		}
 
 		// Draw goal
-		shader.setMaterialDiffuse(new Color(1, 1, 1, 1));
+		shader.setMaterialDiffuse(this.goalColor);
 		//shader.setShininess(5);
 		ModelMatrix.main.loadIdentityMatrix();
 		ModelMatrix.main.addTranslation(this.unit * (this.mazeWidth - 0.5f), this.unit * 0.5f, this.unit * (this.mazeDepth - 0.5f));

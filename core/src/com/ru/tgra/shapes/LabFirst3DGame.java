@@ -184,10 +184,10 @@ public class LabFirst3DGame extends ApplicationAdapter implements InputProcessor
 		System.out.println("P. dir: " + player.direction);
 		System.out.println("Vec: " + new Vector3D(0, 1, 0));
 		System.out.println("Result: " + player.direction.cross(new Vector3D(0, 1, 0)));*/
-		shader.setLightDirColor(new Color(0, 1, 0, 1));
+		shader.setLightDirColor(new Color(0.2f, 0.2f, 0.2f, 1));
 
 		shader.setLightPosition(lightPos1);
-		shader.setLightPosColor(new Color(0, 0, 1, 1));
+		shader.setLightPosColor(new Color(1, 0, 0, 1));
 
 
 		shader.setShininess(5);
