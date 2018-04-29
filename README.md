@@ -5,6 +5,9 @@ Karin Frlic, October 2017
 ## Aim of the Game
 Get to the box.
 
+## How to run
+Run `gradle run` in the root directory.
+
 ## How to play
 * Press **V** to switch between first and third person view.
 * Press **R** to reset the level if you get stuck.
